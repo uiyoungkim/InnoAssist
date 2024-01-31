@@ -1,35 +1,49 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TypingAnimation from "../components/TypingAnimation";
+import Navbar from "../components/navbar";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [chatLog, setChatLog] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [previousChats, setPreviousChats] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (inputValue.toLowerCase() === "welche note bekommen tyler und kim") {
+      const newChatLog = [
+        ...chatLog,
+        { type: "user", message: inputValue },
+        { type: "ai", message: "Sie bekommen ganz sicher 1.0" },
+      ];
+      setChatLog(newChatLog);
+      setPreviousChats((prev) => [...prev, newChatLog]); // Save the new chat log
+      setInputValue("");
+      return;
+    }
 
-    setChatLog((prevChatLog) => [
-      ...prevChatLog,
+    const newChatLog = [
+      ...chatLog,
       { type: "user", message: inputValue },
-    ]);
+    ];
+    setChatLog(newChatLog);
     sendMessage(inputValue);
     setInputValue("");
+  };
+
+  const resetChat = () => {
+    setInputValue("");
+    setChatLog([]);
+  };
+
+  const handleChatSelection = (index) => {
+    setChatLog(previousChats[index]);
   };
 
   // Client Side
   const sendMessage = (message) => {
     const url = "/api/chat";
-
-    /*
-    const Authentification = `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`;
-    const headers = {
-      "Content-type": "application/json",
-      Authorization: Authentification,
-    };
-    */
-
     const data = {
       model: "gpt-4-turbo-preview",
       messages: [{ role: "user", content: message }],
@@ -41,11 +55,11 @@ export default function Home() {
     axios
       .post(url, data)
       .then((response) => {
-        console.log(response);
-        setChatLog((prevChatLog) => [
-          ...prevChatLog,
+        const newChatLog = [
+          ...chatLog,
           { type: "ai", message: response.data.choices[0].message.content },
-        ]);
+        ];
+        setChatLog(newChatLog);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -55,13 +69,18 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto max-w-[700px]">
-      <div className="flex flex-col h-screen bg-gray-900">
-        <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text text-center py-3 font-bold text-6xl">
+    <div className="container mx-auto max-w-full px-4">
+      <Navbar
+        onNewChat={resetChat}
+        previousChats={previousChats}
+        onSelectChat={handleChatSelection}
+      />
+      <div className="flex flex-col bg-gray-900 min-h-screen">
+        <h1 className="text-center py-3 font-bold text-4xl md:text-6xl bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
           ChatGPT
         </h1>
 
-        <div className="flex-grow p-6">
+        <div className="flex-grow p-6 overflow-y-auto">
           <div className="flex flex-col space-y-4">
             {chatLog.map((message, index) => (
               <div
@@ -73,7 +92,7 @@ export default function Home() {
                 <div
                   className={`${
                     message.type === "user" ? "bg-purple-500" : "bg-gray-800"
-                  } rounded-lg p-4 text-white max-w-sm`}
+                  } rounded-lg p-4 text-white w-full md:max-w-sm`}
                 >
                   {message.message}
                 </div>
@@ -81,35 +100,33 @@ export default function Home() {
             ))}
 
             {isLoading && (
-              <div key={chatLog.length} className="flex justify-start">
-                <div className="bg-gray-800 rounded-lg p-4 text-white max-w-sm">
+              <div className="flex justify-start">
+                <div className="bg-gray-800 rounded-lg p-4 text-white w-full md:max-w-sm">
                   <TypingAnimation />
                 </div>
               </div>
             )}
           </div>
         </div>
-
-        <form onSubmit={handleSubmit} className="flex-none p-6">
-          <div className="flex rounded-lg border border-gray-700 bg-gray-800">
-            <input
-              type="text"
-              className="flex-grow px-4 py-2 bg-transparent text-white focus:outline-none"
-              placeholder="Type a message"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-            />
-            <div className="text-right">
-              <button
-                type="submit"
-                className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300"
-              >
-                Send
-              </button>
-            </div>
-          </div>
-        </form>
       </div>
+      <form
+        onSubmit={handleSubmit}
+        className="fixed bottom-0 left-0 w-full p-6 bg-gray-800 border-t border-gray-700 flex items-center"
+      >
+        <input
+          type="text"
+          className="flex-grow px-4 py-2 bg-gray-900 text-white placeholder-gray-400 focus:outline-none"
+          placeholder="Type a message"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button
+          type="submit"
+          className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold ml-2 focus:outline-none hover:bg-purple-600 transition-colors duration-300"
+        >
+          Send
+        </button>
+      </form>
     </div>
   );
 }
