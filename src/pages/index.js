@@ -55,13 +55,13 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto max-w-[700px]">
-      <div className="flex flex-col h-screen bg-gray-900">
-        <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text text-center py-3 font-bold text-6xl">
+    <div className="container mx-auto max-w-full px-4">
+      <div className="flex flex-col bg-gray-900 min-h-screen">
+        <h1 className="text-center py-3 font-bold text-4xl md:text-6xl bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
           ChatGPT
         </h1>
 
-        <div className="flex-grow p-6">
+        <div className="flex-grow p-6 overflow-y-auto">
           <div className="flex flex-col space-y-4">
             {chatLog.map((message, index) => (
               <div
@@ -73,7 +73,7 @@ export default function Home() {
                 <div
                   className={`${
                     message.type === "user" ? "bg-purple-500" : "bg-gray-800"
-                  } rounded-lg p-4 text-white max-w-sm`}
+                  } rounded-lg p-4 text-white w-full md:max-w-sm`}
                 >
                   {message.message}
                 </div>
@@ -81,8 +81,8 @@ export default function Home() {
             ))}
 
             {isLoading && (
-              <div key={chatLog.length} className="flex justify-start">
-                <div className="bg-gray-800 rounded-lg p-4 text-white max-w-sm">
+              <div className="flex justify-start">
+                <div className="bg-gray-800 rounded-lg p-4 text-white w-full md:max-w-sm">
                   <TypingAnimation />
                 </div>
               </div>
@@ -90,7 +90,7 @@ export default function Home() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex-none p-6">
+        <form onSubmit={handleSubmit} className="p-6">
           <div className="flex rounded-lg border border-gray-700 bg-gray-800">
             <input
               type="text"
