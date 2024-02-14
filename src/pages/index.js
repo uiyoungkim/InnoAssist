@@ -22,6 +22,9 @@ export default function Home() {
   const sendMessage = (message) => {
     const url = "/api/chat";
 
+    //Hi
+
+    
     /*
     const Authentification = `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`;
     const headers = {
