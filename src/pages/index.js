@@ -11,30 +11,27 @@ export default function Home() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (inputValue.toLowerCase() === "welche note bekommen tyler und kim") {
+    if (inputValue.toLowerCase() === "test") {
       const newChatLog = [
         ...chatLog,
         { type: "user", message: inputValue },
         { type: "ai", message: "Sie bekommen ganz sicher 1.0" },
       ];
       setChatLog(newChatLog);
-      setPreviousChats((prev) => [...prev, newChatLog]); // Save the new chat log
       setInputValue("");
       return;
     }
 
-    const newChatLog = [
-      ...chatLog,
-      { type: "user", message: inputValue },
-    ];
-    setChatLog(newChatLog);
-    sendMessage(inputValue);
+    const updatedChatLog = [...chatLog, { type: "user", message: inputValue }];
+    setChatLog(updatedChatLog);
+    sendMessage(inputValue, updatedChatLog); // Pass updated chat log to sendMessage
     setInputValue("");
   };
 
   const resetChat = () => {
     setInputValue("");
     setChatLog([]);
+    setPreviousChats([]); // Reset previous chats
   };
 
   const handleChatSelection = (index) => {
@@ -42,7 +39,9 @@ export default function Home() {
   };
 
   // Client Side
-  const sendMessage = (message) => {
+  // Client Side
+  const sendMessage = (message, updatedChatLog) => {
+    // Receive updatedChatLog as argument
     const url = "/api/chat";
     const data = {
       model: "gpt-4-turbo-preview",
@@ -55,12 +54,20 @@ export default function Home() {
     axios
       .post(url, data)
       .then((response) => {
-        const newChatLog = [
-          ...chatLog,
-          { type: "ai", message: response.data.choices[0].message.content },
-        ];
+        const aiResponse = {
+          type: "ai",
+          message: response.data.choices[0].message.content,
+        };
+        const newChatLog = [...updatedChatLog, aiResponse]; // Append AI response to updatedChatLog
         setChatLog(newChatLog);
         setIsLoading(false);
+
+        // Update previousChats
+        setPreviousChats((prevChats) => {
+          const updatedChats = [...prevChats];
+          updatedChats[0] = newChatLog; // Update the first entry with the latest chat log
+          return updatedChats;
+        });
       })
       .catch((error) => {
         setIsLoading(false);
