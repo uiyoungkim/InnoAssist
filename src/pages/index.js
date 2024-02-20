@@ -33,14 +33,16 @@ export default function Home() {
     setChatLog([]);
     setPreviousChats([]); // Reset previous chats
   };
-
+  
+/*
     --> Request for Client Side
     const Authentification = `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`;
     const headers = {
       "Content-type": "application/json",
       Authorization: Authentification,
     };
-
+*/
+  
   const handleChatSelection = (index) => {
     setChatLog(previousChats[index]);
   };
