@@ -22,7 +22,8 @@ export default function Home() {
   const sendMessage = (message) => {
     const url = "/api/chat";
 
-    /*
+    /* 
+    --> Request for Client Side
     const Authentification = `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`;
     const headers = {
       "Content-type": "application/json",
@@ -58,7 +59,7 @@ export default function Home() {
     <div className="container mx-auto max-w-full px-4">
       <div className="flex flex-col bg-gray-900 min-h-screen">
         <h1 className="text-center py-3 font-bold text-4xl md:text-6xl bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
-          ChatGPT
+          Personal Assistant
         </h1>
 
         <div className="flex-grow p-6 overflow-y-auto">
