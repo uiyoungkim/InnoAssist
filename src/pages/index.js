@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TypingAnimation from "../components/TypingAnimation";
 import Navbar from "../components/navbar";
 
@@ -11,21 +11,27 @@ export default function Home() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (inputValue.toLowerCase() === "test") {
-      const newChatLog = [
+    // check if user wants to generate an image
+    if (inputValue.toLowerCase().startsWith("generate image:")) {
+      const imageDescription = inputValue
+        .substring("generate image:".length)
+        .trim();
+
+      const newChatLog = [...chatLog, { type: "user", message: inputValue }];
+      setChatLog(newChatLog);
+      generateImage(imageDescription, newChatLog);
+      setInputValue("");
+    }
+    // ->  normal chat message
+    else {
+      const updatedChatLog = [
         ...chatLog,
         { type: "user", message: inputValue },
-        { type: "ai", message: "Sie bekommen ganz sicher 1.0" },
       ];
-      setChatLog(newChatLog);
+      setChatLog(updatedChatLog);
+      sendMessage(inputValue, updatedChatLog);
       setInputValue("");
-      return;
     }
-
-    const updatedChatLog = [...chatLog, { type: "user", message: inputValue }];
-    setChatLog(updatedChatLog);
-    sendMessage(inputValue, updatedChatLog); // Pass updated chat log to sendMessage
-    setInputValue("");
   };
 
   const resetChat = () => {
@@ -33,20 +39,10 @@ export default function Home() {
     setChatLog([]);
     setPreviousChats([]); // Reset previous chats
   };
-  
-/*
-    --> Request for Client Side
-    const Authentification = `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`;
-    const headers = {
-      "Content-type": "application/json",
-      Authorization: Authentification,
-    };
-*/
-  
+
   const handleChatSelection = (index) => {
     setChatLog(previousChats[index]);
   };
-
 
   // Client Side
   const sendMessage = (message, updatedChatLog) => {
@@ -84,6 +80,36 @@ export default function Home() {
       });
   };
 
+  // For img
+  const generateImage = (prompt, newChatLog) => {
+    setIsLoading(true);
+
+    axios
+      .post("/api/image", { prompt })
+      .then((response) => {
+        const imageUrl = response.data.imageUrl;
+        console.log(imageUrl);
+        // Add the image to the chat log as a response from AI
+        const updatedChatLog = [
+          ...newChatLog,
+          { type: "image", url: imageUrl, message: "" },
+        ];
+        setChatLog(updatedChatLog);
+        setIsLoading(false); // End loading animation
+
+        // Update previousChats here
+        setPreviousChats((prevChats) => {
+          const updatedChats = [...prevChats];
+          updatedChats[0] = updatedChatLog; // Update the first entry with the latest chat log
+          return updatedChats;
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        setIsLoading(false);
+      });
+  };
+
   return (
     <div className="container mx-auto max-w-full px-4">
       <Navbar
@@ -105,13 +131,21 @@ export default function Home() {
                   message.type === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                <div
-                  className={`${
-                    message.type === "user" ? "bg-purple-500" : "bg-gray-800"
-                  } rounded-lg p-4 text-white w-full md:max-w-sm`}
-                >
-                  {message.message}
-                </div>
+                {message.type === "image" ? (
+                  <img
+                    src={message.url}
+                    className="max-w-xs rounded-lg"
+                    alt="Generated"
+                  />
+                ) : (
+                  <div
+                    className={`${
+                      message.type === "user" ? "bg-purple-500" : "bg-gray-800"
+                    } rounded-lg p-4 text-white w-full md:max-w-sm`}
+                  >
+                    {message.message}
+                  </div>
+                )}
               </div>
             ))}
 
