@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+
 function Navbar({ onNewChat, previousChats, onSelectChat }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -15,6 +16,7 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
     onSelectChat(index);
     setIsDropdownOpen(false);
   };
+
 
   return (
     <nav className="bg-gray-800 shadow-lg">
@@ -62,6 +64,7 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
               </div>
             </div>
           </div>
+
           <div className="flex items-center">
             <button
               className="bg-gray-700 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md text-sm focus:outline-none"
@@ -99,10 +102,13 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
               )}
             </div>
           </div>
+
         </div>
       </div>
     </nav>
   );
 }
 
+
 export default Navbar;
+

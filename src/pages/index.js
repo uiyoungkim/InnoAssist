@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 import TypingAnimation from "../components/TypingAnimation";
-import Navbar from "../components/navbar";
+import Navbar from "../components/navbar"; 
+
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
@@ -113,9 +114,11 @@ export default function Home() {
   return (
     <div className="container mx-auto max-w-full px-4">
       <Navbar
+
         onNewChat={resetChat}
         previousChats={previousChats}
         onSelectChat={handleChatSelection}
+
       />
       <div className="flex flex-col bg-gray-900 min-h-screen">
         <h1 className="text-center py-3 font-bold text-4xl md:text-6xl bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
