@@ -1,27 +1,41 @@
 import axios from "axios";
 import { useState } from "react";
 import TypingAnimation from "../components/TypingAnimation";
-import Navbar from "../components/navbar"; 
-
+import Navbar from "../components/navbar";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [chatLog, setChatLog] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [previousChats, setPreviousChats] = useState([]);
+ // const [previousChats, setPreviousChats] = useState([]);
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(chatLog);
     // check if user wants to generate an image
     if (inputValue.toLowerCase().startsWith("generate image:")) {
       const imageDescription = inputValue
-        .substring("generate image:".length)
-        .trim();
-
-      const newChatLog = [...chatLog, { type: "user", message: inputValue }];
+      .substring("generate image:".length)
+      .trim();
+      
+      const newChatLog = [
+        ...chatLog, 
+        { type: "user", message: inputValue }
+      ];
       setChatLog(newChatLog);
       generateImage(imageDescription, newChatLog);
       setInputValue("");
+    }
+    else if(inputValue.toLowerCase() =="test"){
+      const updatedChatLog = [
+        ...chatLog,
+        { type: "user", message: inputValue },
+        { type: "ai", message: "Test response" },
+      ];
+      setChatLog(updatedChatLog);
+      setInputValue("");
+      
     }
     // ->  normal chat message
     else {
@@ -38,16 +52,16 @@ export default function Home() {
   const resetChat = () => {
     setInputValue("");
     setChatLog([]);
-    setPreviousChats([]); // Reset previous chats
+    
   };
-
+/*
   const handleChatSelection = (index) => {
     setChatLog(previousChats[index]);
   };
+  */
 
   // Client Side
   const sendMessage = (message, updatedChatLog) => {
-    // Receive updatedChatLog as argument
     const url = "/api/chat";
     const data = {
       model: "gpt-4-turbo-preview",
@@ -67,13 +81,7 @@ export default function Home() {
         const newChatLog = [...updatedChatLog, aiResponse]; // Append AI response to updatedChatLog
         setChatLog(newChatLog);
         setIsLoading(false);
-
-        // Update previousChats
-        setPreviousChats((prevChats) => {
-          const updatedChats = [...prevChats];
-          updatedChats[0] = newChatLog; // Update the first entry with the latest chat log
-          return updatedChats;
-        });
+        
       })
       .catch((error) => {
         setIsLoading(false);
@@ -97,13 +105,7 @@ export default function Home() {
         ];
         setChatLog(updatedChatLog);
         setIsLoading(false); // End loading animation
-
-        // Update previousChats here
-        setPreviousChats((prevChats) => {
-          const updatedChats = [...prevChats];
-          updatedChats[0] = updatedChatLog; // Update the first entry with the latest chat log
-          return updatedChats;
-        });
+        
       })
       .catch((error) => {
         console.error(error);
@@ -114,11 +116,9 @@ export default function Home() {
   return (
     <div className="container mx-auto max-w-full px-4">
       <Navbar
-
         onNewChat={resetChat}
-        previousChats={previousChats}
-        onSelectChat={handleChatSelection}
-
+        //previousChats={previousChats}
+        //onSelectChat={handleChatSelection}
       />
       <div className="flex flex-col bg-gray-900 min-h-screen">
         <h1 className="text-center py-3 font-bold text-4xl md:text-6xl bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
