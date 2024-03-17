@@ -27,7 +27,7 @@ export default function Home() {
       generateImage(imageDescription, newChatLog);
       setInputValue("");
     }
-    else if(inputValue.toLowerCase() =="test"){
+    else if(inputValue.toLowerCase() ==="test"){
       const updatedChatLog = [
         ...chatLog,
         { type: "user", message: inputValue },
@@ -125,8 +125,8 @@ export default function Home() {
           Personal Assistant
         </h1>
 
-        <div className="flex-grow p-6 overflow-y-auto">
-          <div className="flex flex-col space-y-4">
+        <div className="flex-grow p-6 ">
+          <div className="flex flex-col space-y-4 mb-20">
             {chatLog.map((message, index) => (
               <div
                 key={index}
@@ -144,7 +144,7 @@ export default function Home() {
                   <div
                     className={`${
                       message.type === "user" ? "bg-purple-500" : "bg-gray-800"
-                    } rounded-lg p-4 text-white w-full md:max-w-sm`}
+                    } rounded-lg p-4 text-white w-full md:max-w-lg`}
                   >
                     {message.message}
                   </div>
