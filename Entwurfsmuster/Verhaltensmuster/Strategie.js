@@ -14,6 +14,12 @@ class ImageResponseStrategy extends ResponseStrategy {
   }
 }
 
+class AudioResponseStrategy extends ResponseStrategy {
+  execute(prompt) {
+    // Logik zum Generieren einer Audio-Datei
+  }
+}
+
 class CodeResponseStrategy extends ResponseStrategy {
   execute(prompt) {
     // Logik zum Generieren von Code
@@ -49,6 +55,8 @@ if (prompt.includes("generiere Bild")) {
   chatbot.setStrategy(new ImageResponseStrategy());
 } else if (prompt.includes("generiere Code")) {
   chatbot.setStrategy(new CodeResponseStrategy());
+}else if(prompt.includes("generiere Audio")){
+  chatbot.setStrategy(new AudioResponseStrategy());
 } else {
   chatbot.setStrategy(new TextResponseStrategy());
 }
