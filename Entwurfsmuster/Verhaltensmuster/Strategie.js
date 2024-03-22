@@ -1,58 +1,58 @@
-// Erzeugungsmuster -> Strategie-Muster
+// --> Entwurfsmuster - Verhaltensmuster - Strategie
 
-// Interface für die Strategien
+// Strategie-Interface
 class ResponseStrategy {
-  execute(message) {
+  execute(prompt) {
     throw new Error("You must implement execute method");
   }
 }
 
-// Konkrete Strategie für Kundendienstanfragen
-class CustomerServiceStrategy extends ResponseStrategy {
-  execute(message) {
-    // Logik, um eine Antwort für den Kundendienst zu generieren
+// Konkrete Strategien
+class ImageResponseStrategy extends ResponseStrategy {
+  execute(prompt) {
+    // Logik zum Generieren eines Bildes
   }
 }
 
-// Konkrete Strategie für technische Unterstützung
-class TechSupportStrategy extends ResponseStrategy {
-  execute(message) {
-    // Logik, um eine Antwort für technische Unterstützung zu generieren
+class CodeResponseStrategy extends ResponseStrategy {
+  execute(prompt) {
+    // Logik zum Generieren von Code
   }
 }
 
-// Konkrete Strategie für allgemeine Anfragen
-class GeneralInquiryStrategy extends ResponseStrategy {
-  execute(message) {
-    // Logik, um eine allgemeine Antwort zu generieren
+class TextResponseStrategy extends ResponseStrategy {
+  execute(prompt) {
+    // Logik zum Generieren von Text
   }
 }
 
-// Kontextklasse, die die aktuelle Strategie hält
+// Kontext
 class Chatbot {
-  constructor() {
-    this.responseStrategy = null;
+  setStrategy(strategy) {
+    this.strategy = strategy;
   }
 
-  setResponseStrategy(strategy) {
-    this.responseStrategy = strategy;
-  }
-
-  generateResponse(message) {
-    if (!this.responseStrategy) {
+  handlePrompt(prompt) {
+    if (!this.strategy) {
       throw new Error("No strategy set");
     }
-    return this.responseStrategy.execute(message);
+    return this.strategy.execute(prompt);
   }
 }
 
-// Verwendung des Strategie-Musters
+// Client
 const chatbot = new Chatbot();
-const message = "Wie kann ich meine Bestellung zurücksenden?";
+const prompt = getUserInput();
 
-// Setze die passende Strategie basierend auf der Anfrage des Benutzers
-chatbot.setResponseStrategy(new CustomerServiceStrategy());
-const response = chatbot.generateResponse(message);
+// Entscheide, welche Strategie basierend auf dem Prompt gesetzt werden soll
+if (prompt.includes("generiere Bild")) {
+  chatbot.setStrategy(new ImageResponseStrategy());
+} else if (prompt.includes("generiere Code")) {
+  chatbot.setStrategy(new CodeResponseStrategy());
+} else {
+  chatbot.setStrategy(new TextResponseStrategy());
+}
 
-// Die Antwort ist eine speziell für Kundendienstanfragen generierte Nachricht
-console.log(response);
+// Führe die ausgewählte Strategie aus
+const response = chatbot.handlePrompt(prompt);
+console.log(response); // Response für User
