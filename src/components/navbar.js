@@ -26,12 +26,12 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
             <div className="flex-shrink-0 flex items-center">
               <img
                 className="block lg:hidden h-8 w-auto"
-                src="/logo.svg"
+                src="/logo.png"
                 alt="Logo"
               />
               <img
                 className="hidden lg:block h-8 w-auto"
-                src="/logo.svg"
+                src="/logo.png"
                 alt="Logo"
               />
             </div>
