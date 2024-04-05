@@ -4,8 +4,8 @@ import TypingAnimation from "../components/TypingAnimation";
 import Navbar from "../components/navbar";
 
 export default function Home() {
-  const [inputValue, setInputValue] = useState("");  // User input
-  const [chatLog, setChatLog] = useState([]);  // Complete Chat log, updated with each message
+  const [inputValue, setInputValue] = useState(""); // User input
+  const [chatLog, setChatLog] = useState([]); // Complete Chat log, updated with each message
   const [isLoading, setIsLoading] = useState(false);
 
   let newChatLog = [];
@@ -14,11 +14,14 @@ export default function Home() {
     event.preventDefault();
 
     // check if user wants to generate an image
-    if (inputValue.toLowerCase().includes("generate image") || inputValue.toLowerCase().includes("generate an image")){
-
-      newChatLog = [ // Add user message to chat log
+    if (
+      inputValue.toLowerCase().includes("generate image") ||
+      inputValue.toLowerCase().includes("generate an image")
+    ) {
+      newChatLog = [
+        // Add user message to chat log
         ...chatLog,
-        { type: "user", message: inputValue }
+        { type: "user", message: inputValue },
       ];
       setChatLog(newChatLog); // Update chat log
       generateImage(inputValue, newChatLog); // Generate image
@@ -26,8 +29,9 @@ export default function Home() {
     }
 
     // test case without sending an API request
-    else if (inputValue.toLowerCase() === ("test")) {
-      newChatLog = [ // Add user message and test response to chat log
+    else if (inputValue.toLowerCase() === "test") {
+      newChatLog = [
+        // Add user message and test response to chat log
         ...chatLog,
         { type: "user", message: inputValue },
         { type: "ai", message: "Test response" },
@@ -38,7 +42,8 @@ export default function Home() {
 
     // normal chat message
     else {
-      newChatLog = [ // Add user message to chat log
+      newChatLog = [
+        // Add user message to chat log
         ...chatLog,
         { type: "user", message: inputValue },
       ];
@@ -48,7 +53,8 @@ export default function Home() {
     }
   };
 
-  const resetChat = () => { // Reset chat log and input field
+  const resetChat = () => {
+    // Reset chat log and input field
     setInputValue("");
     setChatLog([]);
   };
@@ -74,10 +80,9 @@ export default function Home() {
         newChatLog = [...iChatLog, aiResponse]; // Append AI response to Chat Log
         setChatLog(newChatLog); // Update chat log
         setIsLoading(false); // End loading animation
-
-      }) 
+      })
       .catch((error) => {
-        setIsLoading(false); 
+        setIsLoading(false);
         console.log(error);
       });
   };
@@ -87,16 +92,16 @@ export default function Home() {
     setIsLoading(true); // Start loading animation
 
     axios // Send POST request to /api/image with user message
-      .post("/api/image", { prompt }) 
+      .post("/api/image", { prompt })
       .then((response) => {
-        const imageUrl = response.data.imageUrl; // Get image URL from response object 
-        newChatLog = [ // Add the image to the chat log as a response from AI
+        const imageUrl = response.data.imageUrl; // Get image URL from response object
+        newChatLog = [
+          // Add the image to the chat log as a response from AI
           ...iChatLog,
           { type: "image", url: imageUrl, message: "" },
         ];
         setChatLog(newChatLog); // Update chat log
         setIsLoading(false); // End loading animation
-
       })
       .catch((error) => {
         console.error(error);
@@ -108,21 +113,18 @@ export default function Home() {
     <div className="container mx-auto max-w-full px-4">
       <Navbar
         onNewChat={resetChat}
-      //previousChats={previousChats}
-      //onSelectChat={handleChatSelection}
+        //previousChats={previousChats}
+        //onSelectChat={handleChatSelection}
       />
       <div className="flex flex-col bg-gray-900 min-h-screen">
-        <h1 className="text-center py-3 font-bold text-4xl md:text-6xl bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
-          Personal Assistant
-        </h1>
-
         <div className="flex-grow p-6 ">
           <div className="flex flex-col space-y-4 mb-20">
             {chatLog.map((message, index) => (
               <div
                 key={index}
-                className={`flex ${message.type === "user" ? "justify-end" : "justify-start"
-                  }`}
+                className={`flex ${
+                  message.type === "user" ? "justify-end" : "justify-start"
+                }`}
               >
                 {message.type === "image" ? (
                   <img
@@ -132,8 +134,9 @@ export default function Home() {
                   />
                 ) : (
                   <div
-                    className={`${message.type === "user" ? "bg-purple-500" : "bg-gray-800"
-                      } rounded-lg p-4 text-white w-full md:max-w-lg`}
+                    className={`${
+                      message.type === "user" ? "bg-purple-500" : "bg-gray-800"
+                    } rounded-lg p-4 text-white w-full md:max-w-lg`}
                   >
                     {message.message}
                   </div>

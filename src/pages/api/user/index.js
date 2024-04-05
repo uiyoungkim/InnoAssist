@@ -7,6 +7,10 @@ import argon2 from "argon2";
 const db = knex(knexConfig.development);
 
 export default async function handler(req, res) {
+  /*
+--> Get all users endpoint : http://localhost:300/api/user (GET)
+*/
+
   if (req.method === "GET") {
     try {
       const data = await db.select("*").from("user");
@@ -16,6 +20,16 @@ export default async function handler(req, res) {
       res.status(500).json({ error: "Interner Serverfehler" });
     }
   } else if (req.method === "POST") {
+    /* 
+--> Register endpoint : http://localhost:300/api/user (POST)
+BSP Body:
+  {
+    "username": "Uiyoung Kim",
+    "email": "uiyoung@g.com",
+    "password": "123"
+    
+  }
+  */
     const { email, username, password } = req.body;
     try {
       const existingUser = await db

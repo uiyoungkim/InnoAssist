@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-
 function Navbar({ onNewChat, previousChats, onSelectChat }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -16,7 +15,6 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
     onSelectChat(index);
     setIsDropdownOpen(false);
   };
-
 
   return (
     <nav className="bg-gray-800 shadow-lg">
@@ -102,13 +100,10 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
               )}
             </div>
           </div>
-
         </div>
       </div>
     </nav>
   );
 }
 
-
 export default Navbar;
-
