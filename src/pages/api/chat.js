@@ -13,8 +13,9 @@ export default async function handler(req, res) {
 
   const userMessage = messages[0].content;
   const userId = extractUserId(req);
-  const sessionId = req.body.sessionId;
-
+  //const sessionId = req.body.sessionId;
+  //console.log("sessionId", sessionId); // -> das soll von frontend kommen
+  let sessionId = 5;
   try {
     const url = "https://api.openai.com/v1/chat/completions";
     const headers = {
@@ -38,14 +39,14 @@ export default async function handler(req, res) {
         Message: userMessage,
         MessageType: "user",
         CreatedAt: new Date(),
-        //  SessionID: sessionId,
+        SessionID: sessionId,
       },
       {
         UserID: userId,
         Message: aiReply,
         MessageType: "AI",
         CreatedAt: new Date(),
-        // SessionID: sessionId,
+        SessionID: sessionId,
       },
     ]);
 
