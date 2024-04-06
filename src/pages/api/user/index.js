@@ -48,7 +48,7 @@ export default async function handler(req, res) {
         }
 
         const token = jwt.sign(
-          { userId: user.id, email: user.Email },
+          { userId: user.UserID, email: user.Email },
           process.env.JWT_SECRET,
           { expiresIn: "2h" }
         );
@@ -106,6 +106,21 @@ export default async function handler(req, res) {
           .status(500)
           .json({ error: "Fehler beim Registrieren des Benutzers." });
       }
+    } else if (req.method === "POST" && req.body.action === "logout") {
+      // Logout-Logik
+      // request body: hardcorded : { action: "logout" }
+      res.setHeader(
+        "Set-Cookie",
+        serialize("auth", "", {
+          httpOnly: true,
+          secure: true,
+          sameSite: "strict",
+          path: "/",
+          maxAge: 0,
+        })
+      );
+
+      res.status(200).json({ message: "Logout erfolgreich." });
     } else {
       // Ungültige Anfrage
       res.status(400).json({ error: "Ungültige Anfrage." });

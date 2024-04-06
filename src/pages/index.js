@@ -75,7 +75,7 @@ export default function Home() {
       .then((response) => {
         const aiResponse = {
           type: "ai",
-          message: response.data.choices[0].message.content, // Get AI response from response object
+          message: response.data.aiReply, // Get AI response from response object
         };
         newChatLog = [...iChatLog, aiResponse]; // Append AI response to Chat Log
         setChatLog(newChatLog); // Update chat log
