@@ -11,6 +11,8 @@ function Navbar({ onNewChat, previousChats, onSelectChat, handleSaveChat }) {
     onNewChat();
   };
 
+  
+
   const handleChatSelection = (index) => {
     onSelectChat(index);
     setIsDropdownOpen(false);
@@ -58,6 +60,12 @@ function Navbar({ onNewChat, previousChats, onSelectChat, handleSaveChat }) {
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Contact
+                </a>
+                <a
+                  href="../signin"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Sign in
                 </a>
               </div>
             </div>
