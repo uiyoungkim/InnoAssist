@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Navbar({ onNewChat, previousChats, onSelectChat }) {
+function Navbar({ onNewChat, previousChats, onSelectChat, handleSaveChat }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -63,6 +63,13 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
             </div>
           </div>
 
+          <button
+            className="bg-green-700 mr-4 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md text-sm focus:outline-none"
+            onClick={handleSaveChat}
+          >
+            Save Chat
+          </button>
+
           <div className="flex items-center">
             <button
               className="bg-gray-700 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md text-sm focus:outline-none"
@@ -70,6 +77,7 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
             >
               New Chat
             </button>
+
             <div className="relative ml-3">
               <button
                 className="bg-gray-700 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md text-sm focus:outline-none"
