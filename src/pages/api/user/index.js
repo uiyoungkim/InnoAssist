@@ -9,16 +9,7 @@ import { serialize } from "cookie";
 const db = knex(knexConfig.development);
 
 export default async function handler(req, res) {
-  if (req.method === "GET") {
-    // --> GET-Anfrage für alle Benutzer
-    try {
-      const users = await db.select("*").from("user");
-      res.status(200).json(users);
-    } catch (error) {
-      console.error("Datenbankabfrage Fehler:", error);
-      res.status(500).json({ error: "Interner Serverfehler" });
-    }
-  } else if (req.method === "POST") {
+if (req.method === "POST") {
     const { email, password, username } = req.body;
 
     // Überprüfung, ob es sich um eine Login-Anfrage handelt
@@ -86,7 +77,6 @@ export default async function handler(req, res) {
       try {
         const existingUser = await db("user")
           .where("Email", email)
-          .orWhere("Username", username)
           .first();
         if (existingUser) {
           return res.status(400).json({ error: "Benutzer existiert bereits." });
@@ -126,7 +116,7 @@ export default async function handler(req, res) {
       res.status(400).json({ error: "Ungültige Anfrage." });
     }
   } else {
-    res.setHeader("Allow", ["GET", "POST"]);
+    res.setHeader("Allow", ["POST"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
