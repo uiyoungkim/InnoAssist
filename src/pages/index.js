@@ -10,6 +10,15 @@ export default function Home() {
 
   let newChatLog = [];
 
+  const handleSaveChat = async () => {
+    try {
+      await axios.post("/api/saveChatLog", { chatLog });
+      console.log("Chat-Verlauf gespeichert.");
+    } catch (error) {
+      console.error("Fehler beim Speichern des Chat-Verlaufs:", error);
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -75,7 +84,7 @@ export default function Home() {
       .then((response) => {
         const aiResponse = {
           type: "ai",
-          message: response.data.aiReply, // Get AI response from response object
+          message: response.data.choices[0].message.content, // Get AI response from response object
         };
         newChatLog = [...iChatLog, aiResponse]; // Append AI response to Chat Log
         setChatLog(newChatLog); // Update chat log
@@ -111,11 +120,8 @@ export default function Home() {
 
   return (
     <div className="container mx-auto max-w-full px-4">
-      <Navbar
-        onNewChat={resetChat}
-        //previousChats={previousChats}
-        //onSelectChat={handleChatSelection}
-      />
+      <Navbar onNewChat={() => {}} handleSaveChat={handleSaveChat} />
+
       <div className="flex flex-col bg-gray-900 min-h-screen">
         <div className="flex-grow p-6 ">
           <div className="flex flex-col space-y-4 mb-20">
