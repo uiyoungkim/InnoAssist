@@ -11,7 +11,9 @@ export default async function handler(req, res) {
       .json({ message: "Method not allowed - Should be Post" });
   }
 
-  const { chatLog } = req.body; // Chat-Verlauf als JSON-Objekt oder Array
+  const { chatLog, chatName } = req.body; // Chat-Verlauf als JSON-Objekt oder Array
+  // Vergesse hier nicht chatName in Frontend mitzugeben!!!
+
   const userId = extractUserId(req); // UserID extrahieren
   console.log("Chat-Verlauf:", chatLog);
 
@@ -19,6 +21,7 @@ export default async function handler(req, res) {
     await db("ChatLog").insert({
       UserID: userId,
       chatData: JSON.stringify(chatLog),
+      chatName: chatName,
     });
 
     res.status(200).json({ message: "Chat-Verlauf erfolgreich gespeichert" });
