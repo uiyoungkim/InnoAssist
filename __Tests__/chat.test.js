@@ -1,5 +1,5 @@
 import { createMocks } from "node-mocks-http";
-import handler from "@/pages/api/chat"; // Pfad entsprechend anpassen
+import handler from "@/pages/api/chat";
 
 describe("/api/chat Integrationstest", () => {
   test("POST-Anfrage sendet eine echte Anfrage und vergleicht mit tatsächlicher Antwort", async () => {

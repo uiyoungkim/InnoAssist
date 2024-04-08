@@ -1,7 +1,5 @@
-// pages/api/chat/start.js
-
 import knex from "knex";
-import knexConfig from "../../../knexfile";
+import knexConfig from "../../../../knexfile";
 import { extractUserId } from "@/helper/auth";
 
 const db = knex(knexConfig.development);
