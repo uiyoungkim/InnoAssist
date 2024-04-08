@@ -18,5 +18,4 @@ export function extractUserId(req) {
   }
 
   return decoded.userId;
-  console.log("decoded", decoded);
 }

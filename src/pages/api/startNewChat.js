@@ -1,3 +1,5 @@
+// pages/api/chat/start.js
+
 import knex from "knex";
 import knexConfig from "../../../knexfile";
 import { extractUserId } from "@/helper/auth";
@@ -8,23 +10,27 @@ export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res
       .status(405)
-      .json({ message: "Method not allowed - Should be Post" });
+      .json({ message: "Methode nicht erlaubt - POST erforderlich" });
   }
 
   try {
-    const userId = extractUserId(req);
-    const [session] = await db("ChatSession").insert({
+    const userId = extractUserId(req); // UserID extrahieren
+
+    const initialChatData = [
+      {
+        type: "ai", // 'ai' steht für eine Nachricht vom System/Bot
+        message: "Hey, Welcome to InnoAssist! How can I help you today?",
+      },
+    ];
+    await db("ChatLog").insert({
       UserID: userId,
-      StartTimestamp: new Date(),
+      chatData: JSON.stringify(initialChatData),
+      createdAt: new Date(),
     });
 
-    res.status(200).json({ sessionId: session });
-    console.log("Neue ChatSession gestartet:", session);
+    res.status(200).json({ message: "Neuer Chat erfolgreich gestartet" });
   } catch (error) {
-    console.error("Fehler beim Starten einer neuen ChatSession:", error);
-    res.status(500).json({ message: "Something went wrong" });
+    console.error("Fehler beim Starten eines neuen Chats:", error);
+    res.status(500).json({ message: "Etwas ist schief gelaufen" });
   }
 }
-
-// Use this endpoint to start a new chat session. The endpoint will return the ID of the new chat session
-// Session Id soll dann in frontend gespeichert werden
