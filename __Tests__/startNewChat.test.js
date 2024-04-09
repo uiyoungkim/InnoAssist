@@ -1,4 +1,4 @@
-import handler from "@/pages/api/chat/start"; // Adjust the path according to your project structure
+import handler from "@/pages/api/chat/start";
 import { createMocks } from "node-mocks-http";
 
 describe("POST /api/chat/start", () => {
@@ -7,7 +7,7 @@ describe("POST /api/chat/start", () => {
       method: "POST",
       headers: {
         cookie:
-          "auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImVtYWlsIjoidWl5b3VuZ2tpbTIwMDJAZy5jb20iLCJpYXQiOjE3MTI2MTkzODUsImV4cCI6MTcxMjYyNjU4NX0.w74Wf_tgbXx7nFnPGfoIuCRRFOtoTP90kI13Ofar85A",
+          "auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImVtYWlsIjoidWl5b3VuZ2tpbTIwMDJAZy5jb20iLCJpYXQiOjE3MTI2NzgzMTQsImV4cCI6MTcxOTg3ODMxNH0.ZOvKEMjh-8yhBmI4-ksjCa3-hh5IwrHqC7PAGkQ3INg",
       },
     });
 
@@ -24,6 +24,7 @@ describe("POST /api/chat/start", () => {
       method: "POST",
       headers: {
         cookie: "", // leere Cookie (not authenticated)
+        // --> Deshalb kommt das zu Nicht Authentifiziert in console.log aber so ist ja gewollt und wird getestet
       },
     });
 
@@ -38,6 +39,10 @@ describe("POST /api/chat/start", () => {
   test("should respond with 405 status code for non-POST requests", async () => {
     const { req, res } = createMocks({
       method: "GET",
+      headers: {
+        cookie:
+          "auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImVtYWlsIjoidWl5b3VuZ2tpbTIwMDJAZy5jb20iLCJpYXQiOjE3MTI2NzgzMTQsImV4cCI6MTcxOTg3ODMxNH0.ZOvKEMjh-8yhBmI4-ksjCa3-hh5IwrHqC7PAGkQ3INg", // Stelle sicher, dass dies ein gültiger Token ist
+      },
     });
 
     await handler(req, res);

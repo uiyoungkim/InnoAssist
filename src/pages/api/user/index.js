@@ -38,7 +38,7 @@ export default async function handler(req, res) {
         const token = jwt.sign(
           { userId: user.UserID, email: user.Email },
           process.env.JWT_SECRET,
-          { expiresIn: "2h" }
+          { expiresIn: "2000h" }
         );
 
         res.setHeader(
@@ -48,7 +48,7 @@ export default async function handler(req, res) {
             secure: true,
             sameSite: "strict",
             path: "/",
-            maxAge: 7200,
+            maxAge: 7200 * 1000,
           })
         );
 

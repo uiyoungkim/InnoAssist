@@ -16,16 +16,19 @@ describe("Authentication API Handler Tests", () => {
       message: "Login erfolgreich.",
     });
   });
-
   // Test case for successful registration
   test("should respond with 201 status code and success message for registration", async () => {
+    // Generiere eine einzigartige E-Mail und Benutzernamen basierend auf der aktuellen Zeit
+    const uniqueSuffix = Date.now().toString();
+    const email = `testuser${uniqueSuffix}@example.com`;
+    const username = `testuser${uniqueSuffix}`;
+
     const { req, res } = createMocks({
       method: "POST",
       body: {
-        // --> Jedes mal beim testen neue Email & userName hinzufügen
-        email: "newuser12@example.com",
+        email: email,
         password: "newpassword123",
-        username: "newuse12r",
+        username: username,
       },
     });
 
@@ -51,6 +54,4 @@ describe("Authentication API Handler Tests", () => {
       message: "Logout erfolgreich.",
     });
   });
-
-  // Add more test cases as needed
 });
