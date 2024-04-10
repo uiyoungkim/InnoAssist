@@ -11,8 +11,6 @@ function Navbar({ onNewChat, previousChats, onSelectChat, handleSaveChat }) {
     onNewChat();
   };
 
-  
-
   const handleChatSelection = (index) => {
     onSelectChat(index);
     setIsDropdownOpen(false);
@@ -25,13 +23,13 @@ function Navbar({ onNewChat, previousChats, onSelectChat, handleSaveChat }) {
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex-shrink-0 flex items-center">
               <img
-                className="block lg:hidden h-8 w-auto"
-                src="/logo.png"
+                className="block lg:hidden h-16 w-auto" // Größe für kleinere Bildschirme
+                src="/logo.innoAssist.png"
                 alt="Logo"
               />
               <img
-                className="hidden lg:block h-8 w-auto"
-                src="/logo.png"
+                className="hidden lg:block h-16 w-auto" // Größe für größere Bildschirme
+                src="/logo.innoAssist.png"
                 alt="Logo"
               />
             </div>

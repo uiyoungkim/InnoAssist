@@ -12,7 +12,7 @@ export default function Home() {
 
   const handleSaveChat = async () => {
     try {
-      await axios.post("/api/saveChatLog", { chatLog });
+      await axios.post("/api/chat/saveChat", { chatLog });
       console.log("Chat-Verlauf gespeichert.");
     } catch (error) {
       console.error("Fehler beim Speichern des Chat-Verlaufs:", error);
