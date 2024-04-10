@@ -1,79 +1,76 @@
-import handler from "./handler"; // Stelle sicher, dass der Pfad korrekt ist
+import handler from "@/pages/api/chat/saveChat";
 import { createMocks } from "node-mocks-http";
-import knex from "knex";
-import knexConfig from "../../../../knexfile";
-import { extractUserId } from "@/helper/auth";
 
-// Mock für knex und extractUserId
-jest.mock("knex");
-jest.mock("../src/helper/auth", () => ({
-  extractUserId: jest.fn(() => "mockedUserId"),
-}));
-
-describe("handler function", () => {
-  let dbMock;
-  beforeEach(() => {
-    // Mock für knex initialisieren
-    dbMock = knex(knexConfig.development);
-    knex.mockReturnValue(dbMock);
-  });
-
-  afterEach(() => {
-    // Alle Mocks zurücksetzen
-    jest.clearAllMocks();
-  });
-
-  test("should return 405 status code for non-POST method", async () => {
-    const { req, res } = createMocks({ method: "GET" });
-
-    await handler(req, res);
-
-    expect(res.statusCode).toBe(405);
-    expect(res._getJSONData()).toEqual({
-      message: "Method not allowed - Should be Post",
-    });
-  });
-
-  test("should insert chat log into database and return 200 status code on successful POST request", async () => {
-    const chatLog = [{ message: "Hello" }, { message: "World" }];
-    const chatName = "Test Chat";
-
+describe("POST /api/chat/saveChat", () => {
+  test("sollte mit 200 Statuscode und Erfolgsmeldung antworten", async () => {
     const { req, res } = createMocks({
       method: "POST",
+      body: {
+        chatLog: [
+          {
+            type: "ai",
+            message: "Hey, Welcome to InnoAssist! How can I help you today?",
+          },
+        ],
+        chatName: "TestChatName",
+      },
+      // Annahme: extractUserId liest die UserID aus den Cookies
       headers: {
         cookie:
-          "auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImVtYWlsIjoidWl5b3VuZ2tpbTIwMDJAZy5jb20iLCJpYXQiOjE3MTI2NzgzMTQsImV4cCI6MTcxOTg3ODMxNH0.ZOvKEMjh-8yhBmI4-ksjCa3-hh5IwrHqC7PAGkQ3INg", // Stelle sicher, dass dies ein gültiger Token ist
+          "auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImVtYWlsIjoidWl5b3VuZ2tpbTIwMDJAZy5jb20iLCJpYXQiOjE3MTI2NzgzMTQsImV4cCI6MTcxOTg3ODMxNH0.ZOvKEMjh-8yhBmI4-ksjCa3-hh5IwrHqC7PAGkQ3INg",
       },
-      body: { chatLog, chatName },
     });
 
     await handler(req, res);
 
-    expect(dbMock).toHaveBeenCalledWith("ChatLog");
-    expect(dbMock().insert).toHaveBeenCalledWith({
-      UserID: "mockedUserId",
-      chatData: JSON.stringify(chatLog),
-      chatName,
-    });
-    expect(res.statusCode).toBe(200);
-    expect(res._getJSONData()).toEqual({
+    expect(res._getStatusCode()).toBe(200);
+    expect(JSON.parse(res._getData())).toEqual({
       message: "Chat-Verlauf erfolgreich gespeichert",
     });
   });
 
-  test("should return 500 status code and error message if database insertion fails", async () => {
-    dbMock().insert.mockRejectedValueOnce(new Error("Database error"));
-
+  test("sollte mit 500 Statuscode und Fehlermeldung antworten, wenn die Body fehlt", async () => {
     const { req, res } = createMocks({
       method: "POST",
-      body: { chatLog: [], chatName: "Test Chat" },
+
+      headers: {
+        cookie:
+          "auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImVtYWlsIjoidWl5b3VuZ2tpbTIwMDJAZy5jb20iLCJpYXQiOjE3MTI2NzgzMTQsImV4cCI6MTcxOTg3ODMxNH0.ZOvKEMjh-8yhBmI4-ksjCa3-hh5IwrHqC7PAGkQ3INg",
+      },
     });
 
     await handler(req, res);
 
-    expect(res.statusCode).toBe(500);
-    expect(res._getJSONData()).toEqual({
+    // Die erwartete Antwort könnte variieren, je nachdem wie deine API-Fehler bei fehlender Authentifizierung handhabt.
+    expect(res._getStatusCode()).toBe(500);
+    expect(JSON.parse(res._getData())).toEqual({
       message: "Something went wrong",
+    });
+  });
+
+  test("sollte mit 405 Statuscode antworten für nicht-POST-Anfragen", async () => {
+    const { req, res } = createMocks({
+      method: "GET", // Verwendung einer nicht unterstützten Methode
+      body: {
+        chatLog: [
+          {
+            type: "ai",
+            message: "Hey, Welcome to InnoAssist! How can I help you today?",
+          },
+        ],
+        chatName: "TestChatName",
+      },
+      headers: {
+        cookie:
+          "auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImVtYWlsIjoidWl5b3VuZ2tpbTIwMDJAZy5jb20iLCJpYXQiOjE3MTI2NzgzMTQsImV4cCI6MTcxOTg3ODMxNH0.ZOvKEMjh-8yhBmI4-ksjCa3-hh5IwrHqC7PAGkQ3INg",
+      },
+    });
+
+    await handler(req, res);
+
+    expect(res._getStatusCode()).toBe(405);
+    expect(JSON.parse(res._getData())).toEqual({
+      message: "Method not allowed - Should be Post",
     });
   });
 });
