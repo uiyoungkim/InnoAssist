@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-
-function Navbar({ onNewChat, previousChats, onSelectChat }) {
+function Navbar({ onNewChat, previousChats, onSelectChat, handleSaveChat }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -17,7 +16,6 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
     setIsDropdownOpen(false);
   };
 
-
   return (
     <nav className="bg-gray-800 shadow-lg">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -25,13 +23,13 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex-shrink-0 flex items-center">
               <img
-                className="block lg:hidden h-8 w-auto"
-                src="/logo.svg"
+                className="block lg:hidden h-16 w-auto" // Größe für kleinere Bildschirme
+                src="/logo.innoAssist.png"
                 alt="Logo"
               />
               <img
-                className="hidden lg:block h-8 w-auto"
-                src="/logo.svg"
+                className="hidden lg:block h-16 w-auto" // Größe für größere Bildschirme
+                src="/logo.innoAssist.png"
                 alt="Logo"
               />
             </div>
@@ -61,9 +59,22 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
                 >
                   Contact
                 </a>
+                <a
+                  href="../signin"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Sign in
+                </a>
               </div>
             </div>
           </div>
+
+          <button
+            className="bg-green-700 mr-4 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md text-sm focus:outline-none"
+            onClick={handleSaveChat}
+          >
+            Save Chat
+          </button>
 
           <div className="flex items-center">
             <button
@@ -72,6 +83,7 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
             >
               New Chat
             </button>
+
             <div className="relative ml-3">
               <button
                 className="bg-gray-700 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md text-sm focus:outline-none"
@@ -102,13 +114,10 @@ function Navbar({ onNewChat, previousChats, onSelectChat }) {
               )}
             </div>
           </div>
-
         </div>
       </div>
     </nav>
   );
 }
 
-
 export default Navbar;
-

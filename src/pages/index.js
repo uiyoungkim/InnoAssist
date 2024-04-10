@@ -1,53 +1,75 @@
 import axios from "axios";
 import { useState } from "react";
 import TypingAnimation from "../components/TypingAnimation";
-import Navbar from "../components/navbar"; 
-
+import Navbar from "../components/navbar";
 
 export default function Home() {
-  const [inputValue, setInputValue] = useState("");
-  const [chatLog, setChatLog] = useState([]);
+  const [inputValue, setInputValue] = useState(""); // User input
+  const [chatLog, setChatLog] = useState([]); // Complete Chat log, updated with each message
   const [isLoading, setIsLoading] = useState(false);
-  const [previousChats, setPreviousChats] = useState([]);
+
+  let newChatLog = [];
+
+  const handleSaveChat = async () => {
+    try {
+      await axios.post("/api/chat/saveChat", { chatLog });
+      console.log("Chat-Verlauf gespeichert.");
+    } catch (error) {
+      console.error("Fehler beim Speichern des Chat-Verlaufs:", error);
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // check if user wants to generate an image
-    if (inputValue.toLowerCase().startsWith("generate image:")) {
-      const imageDescription = inputValue
-        .substring("generate image:".length)
-        .trim();
 
-      const newChatLog = [...chatLog, { type: "user", message: inputValue }];
-      setChatLog(newChatLog);
-      generateImage(imageDescription, newChatLog);
-      setInputValue("");
-    }
-    // ->  normal chat message
-    else {
-      const updatedChatLog = [
+    // check if user wants to generate an image
+    if (
+      inputValue.toLowerCase().includes("generate image") ||
+      inputValue.toLowerCase().includes("generate an image")
+    ) {
+      newChatLog = [
+        // Add user message to chat log
         ...chatLog,
         { type: "user", message: inputValue },
       ];
-      setChatLog(updatedChatLog);
-      sendMessage(inputValue, updatedChatLog);
-      setInputValue("");
+      setChatLog(newChatLog); // Update chat log
+      generateImage(inputValue, newChatLog); // Generate image
+      setInputValue(""); // Clear input field
+    }
+
+    // test case without sending an API request
+    else if (inputValue.toLowerCase() === "test") {
+      newChatLog = [
+        // Add user message and test response to chat log
+        ...chatLog,
+        { type: "user", message: inputValue },
+        { type: "ai", message: "Test response" },
+      ];
+      setChatLog(newChatLog); // Update chat log
+      setInputValue(""); // Clear input field
+    }
+
+    // normal chat message
+    else {
+      newChatLog = [
+        // Add user message to chat log
+        ...chatLog,
+        { type: "user", message: inputValue },
+      ];
+      setChatLog(newChatLog); // Update chat log
+      sendMessage(inputValue, newChatLog); // Call sendMessage function with user input and updated chat log
+      setInputValue(""); // Clear input field
     }
   };
 
   const resetChat = () => {
+    // Reset chat log and input field
     setInputValue("");
     setChatLog([]);
-    setPreviousChats([]); // Reset previous chats
-  };
-
-  const handleChatSelection = (index) => {
-    setChatLog(previousChats[index]);
   };
 
   // Client Side
-  const sendMessage = (message, updatedChatLog) => {
-    // Receive updatedChatLog as argument
+  const sendMessage = (message, iChatLog) => {
     const url = "/api/chat";
     const data = {
       model: "gpt-4-turbo-preview",
@@ -55,25 +77,18 @@ export default function Home() {
       temperature: 0.7,
     };
 
-    setIsLoading(true);
+    setIsLoading(true); // Start loading animation
 
-    axios
+    axios // Send POST request to /api/chat with user message
       .post(url, data)
       .then((response) => {
         const aiResponse = {
           type: "ai",
-          message: response.data.choices[0].message.content,
+          message: response.data.choices[0].message.content, // Get AI response from response object
         };
-        const newChatLog = [...updatedChatLog, aiResponse]; // Append AI response to updatedChatLog
-        setChatLog(newChatLog);
-        setIsLoading(false);
-
-        // Update previousChats
-        setPreviousChats((prevChats) => {
-          const updatedChats = [...prevChats];
-          updatedChats[0] = newChatLog; // Update the first entry with the latest chat log
-          return updatedChats;
-        });
+        newChatLog = [...iChatLog, aiResponse]; // Append AI response to Chat Log
+        setChatLog(newChatLog); // Update chat log
+        setIsLoading(false); // End loading animation
       })
       .catch((error) => {
         setIsLoading(false);
@@ -82,28 +97,20 @@ export default function Home() {
   };
 
   // For img
-  const generateImage = (prompt, newChatLog) => {
-    setIsLoading(true);
+  const generateImage = (prompt, iChatLog) => {
+    setIsLoading(true); // Start loading animation
 
-    axios
+    axios // Send POST request to /api/image with user message
       .post("/api/image", { prompt })
       .then((response) => {
-        const imageUrl = response.data.imageUrl;
-        console.log(imageUrl);
-        // Add the image to the chat log as a response from AI
-        const updatedChatLog = [
-          ...newChatLog,
+        const imageUrl = response.data.imageUrl; // Get image URL from response object
+        newChatLog = [
+          // Add the image to the chat log as a response from AI
+          ...iChatLog,
           { type: "image", url: imageUrl, message: "" },
         ];
-        setChatLog(updatedChatLog);
+        setChatLog(newChatLog); // Update chat log
         setIsLoading(false); // End loading animation
-
-        // Update previousChats here
-        setPreviousChats((prevChats) => {
-          const updatedChats = [...prevChats];
-          updatedChats[0] = updatedChatLog; // Update the first entry with the latest chat log
-          return updatedChats;
-        });
       })
       .catch((error) => {
         console.error(error);
@@ -113,20 +120,11 @@ export default function Home() {
 
   return (
     <div className="container mx-auto max-w-full px-4">
-      <Navbar
+      <Navbar onNewChat={() => {}} handleSaveChat={handleSaveChat} />
 
-        onNewChat={resetChat}
-        previousChats={previousChats}
-        onSelectChat={handleChatSelection}
-
-      />
       <div className="flex flex-col bg-gray-900 min-h-screen">
-        <h1 className="text-center py-3 font-bold text-4xl md:text-6xl bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
-          Personal Assistant
-        </h1>
-
-        <div className="flex-grow p-6 overflow-y-auto">
-          <div className="flex flex-col space-y-4">
+        <div className="flex-grow p-6 ">
+          <div className="flex flex-col space-y-4 mb-20">
             {chatLog.map((message, index) => (
               <div
                 key={index}
@@ -144,7 +142,7 @@ export default function Home() {
                   <div
                     className={`${
                       message.type === "user" ? "bg-purple-500" : "bg-gray-800"
-                    } rounded-lg p-4 text-white w-full md:max-w-sm`}
+                    } rounded-lg p-4 text-white w-full md:max-w-lg`}
                   >
                     {message.message}
                   </div>
