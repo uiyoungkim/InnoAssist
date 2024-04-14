@@ -12,7 +12,7 @@ function Authentication() {
     const email = emailInputRef.current.value;
     const password = passwordInputRef.current.value;
 
-    fetch('http://localhost:3000/api/user/login', {
+    fetch('http://localhost:3000/api/user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ function Authentication() {
     const password = passwordInputRef.current.value;
     const username = usernameInputRef.current.value;
 
-    fetch('http://localhost:3000/api/user/register', {
+    fetch('http://localhost:3000/api/user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
