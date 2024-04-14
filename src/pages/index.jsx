@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
-import TypingAnimation from "../components/TypingAnimation";
-import Navbar from "../components/navbar";
+import TypingAnimation from "@/components/TypingAnimation";
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState(""); // User input
@@ -119,9 +120,8 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto max-w-full px-4">
-      <Navbar onNewChat={() => {}} handleSaveChat={handleSaveChat} />
-
+    <main>
+      <Navbar/>
       <div className="flex flex-col bg-gray-900 min-h-screen">
         <div className="flex-grow p-6 ">
           <div className="flex flex-col space-y-4 mb-20">
@@ -178,6 +178,6 @@ export default function Home() {
           Send
         </button>
       </form>
-    </div>
+      </main>
   );
 }
