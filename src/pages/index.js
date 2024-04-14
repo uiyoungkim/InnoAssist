@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
-import TypingAnimation from "../components/TypingAnimation";
-import Navbar from "../components/navbar";
+import TypingAnimation from "@/components/TypingAnimation";
+import Navbar from "@/components/navbar";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState(""); // User input
