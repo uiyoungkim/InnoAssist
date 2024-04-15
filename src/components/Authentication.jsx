@@ -98,10 +98,10 @@ function Authentication() {
 
   return (
     <>
-      <Button className="text-text-100" onClick={() => setOpenLoginModal(true)}>Sign in</Button>
-      <Button className="text-text-100" onClick={() => setOpenRegisterModal(true)}>Create account</Button>
+      <Button className="text-text-300 hover:bg-secondary-600 hover:text-text-100" onClick={() => setOpenLoginModal(true)}>Sign in</Button>
+      <Button className="text-text-300 hover:bg-secondary-600 hover:text-text-100" onClick={() => setOpenRegisterModal(true)}>Create account</Button>
 
-      <Modal show={openLoginModal} className="flex w-1/4 h-1/2 justify-center border-primary-500 mx-auto pt-4" popup onClose={() => setOpenLoginModal(false)} initialFocus={emailInputRef}>
+      <Modal show={openLoginModal} className="flex w-1/4 h-1/2 justify-center border-primary-500 mx-auto mt-16" popup onClose={() => setOpenLoginModal(false)} initialFocus={emailInputRef}>
         <Modal.Header />
         <Modal.Body>
           <div className="space-y-6">
@@ -131,7 +131,7 @@ function Authentication() {
         </Modal.Body>
       </Modal>
 
-      <Modal show={openRegisterModal} className="flex w-1/4 h-3/4 justify-center border-primary-500 mx-auto pt-4" popup onClose={() => setOpenRegisterModal(false)} initialFocus={emailInputRef}>
+      <Modal show={openRegisterModal} className="flex w-1/4 h-3/4 justify-center border-primary-500 mx-auto mt-16" popup onClose={() => setOpenRegisterModal(false)} initialFocus={emailInputRef}>
         <Modal.Header />
         <Modal.Body>
           <div className="space-y-6">

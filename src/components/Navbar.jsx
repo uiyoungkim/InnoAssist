@@ -1,4 +1,24 @@
 import Authentication from "./Authentication";
+import Contact from "./Contact";
+
+const handleLogout = () => {
+  fetch('http://localhost:3000/api/user', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      action: 'logout'
+  }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
 
 function Navbar() {
   return (
@@ -13,17 +33,18 @@ function Navbar() {
           
             <a
               href="#"
-              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              className="text-text-300 hover:bg-secondary-600 hover:text-text-100 px-3 py-2 rounded-md text-sm font-medium"
             >
               Home
             </a>
-            <a
-              href="#"
-              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Services
-            </a>
+           <Contact/>
         <Authentication />
+        <button
+          onClick={handleLogout}
+          className="text-text-300 hover:bg-secondary-600 hover:text-text-100 px-3 py-2 rounded-md text-sm font-medium"
+        >
+          Logout
+        </button>
         </div>
       </div>
     </nav>

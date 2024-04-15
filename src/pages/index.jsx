@@ -2,7 +2,6 @@ import axios from "axios";
 import { useState } from "react";
 import TypingAnimation from "@/components/TypingAnimation";
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState(""); // User input
@@ -93,8 +92,23 @@ export default function Home() {
       })
       .catch((error) => {
         setIsLoading(false);
-        console.log(error);
+        if (error.response) {
+          const statusCode = error.response.status;
+          if (statusCode === 500) {
+            alert("Please log in before trying to chat with InnoAssist.");
+          } else if (statusCode === 403) {
+            // Handle 403 Forbidden Error
+            alert("It seems you havent unlocked your account yet. Please contact us using our Contact Form.");
+          }
+        } else if (error.request) {
+          console.error("No response received:", error.request);
+          alert("No response received. Please check your internet connection.");
+        } else {
+          console.error("Error:", error.message);
+          alert("An error occurred. Please try again later.");
+        }
       });
+      
   };
 
   // For img
@@ -114,8 +128,22 @@ export default function Home() {
         setIsLoading(false); // End loading animation
       })
       .catch((error) => {
-        console.error(error);
         setIsLoading(false);
+        if (error.response) {
+          const statusCode = error.response.status;
+          if (statusCode === 500) {
+            alert("Please log in before trying to chat with InnoAssist.");
+          } else if (statusCode === 403) {
+            // Handle 403 Forbidden Error
+            alert("It seems you havent unlocked your account yet. Please contact us using our Contact Form.");
+          }
+        } else if (error.request) {
+          console.error("No response received:", error.request);
+          alert("No response received. Please check your internet connection.");
+        } else {
+          console.error("Error:", error.message);
+          alert("An error occurred. Please try again later.");
+        }
       });
   };
 
