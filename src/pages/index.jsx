@@ -1,27 +1,25 @@
 import axios from "axios";
 import { useState } from "react";
-import TypingAnimation from "../components/TypingAnimation";
-import Navbar from "../components/navbar";
+import TypingAnimation from "@/components/TypingAnimation";
+import Navbar from "@/components/Navbar";
+import Side from "@/components/Side";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState(""); // User input
-  const [chatLog, setChatLog] = useState([]); // Complete Chat log, updated with each message
+  const [chatLog, setChatLog] = useState([{ type: "ai", message: "Hello! I'm InnoAssist, your AI assistant. How can I help you today?" }]); 
   const [isLoading, setIsLoading] = useState(false);
 
   let newChatLog = [];
 
-  const handleSaveChat = async () => {
-    try {
-      await axios.post("/api/chat/saveChat", { chatLog });
-      console.log("Chat-Verlauf gespeichert.");
-    } catch (error) {
-      console.error("Fehler beim Speichern des Chat-Verlaufs:", error);
-    }
+  const updateChatLog = (chatData) => {
+    setChatLog(chatData);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    if (!inputValue || inputValue.length === 0) {
+      return;
+  }   
     // check if user wants to generate an image
     if (
       inputValue.toLowerCase().includes("generate image") ||
@@ -48,6 +46,15 @@ export default function Home() {
       setChatLog(newChatLog); // Update chat log
       setInputValue(""); // Clear input field
     }
+    else if(inputValue.toLowerCase()==="omae wa mou shindeiru") {
+      newChatLog = [
+        ...chatLog,
+        { type: "user", message: "お前はもう死んでいる" },
+         { type: "ai", message: "何" },
+      ];
+      setChatLog(newChatLog);
+      setInputValue("");
+    }
 
     // normal chat message
     else {
@@ -60,12 +67,6 @@ export default function Home() {
       sendMessage(inputValue, newChatLog); // Call sendMessage function with user input and updated chat log
       setInputValue(""); // Clear input field
     }
-  };
-
-  const resetChat = () => {
-    // Reset chat log and input field
-    setInputValue("");
-    setChatLog([]);
   };
 
   // Client Side
@@ -92,8 +93,23 @@ export default function Home() {
       })
       .catch((error) => {
         setIsLoading(false);
-        console.log(error);
+        if (error.response) {
+          const statusCode = error.response.status;
+          if (statusCode === 500) {
+            alert("Please log in before trying to chat with InnoAssist.");
+          } else if (statusCode === 403) {
+            // Handle 403 Forbidden Error
+            alert("It seems you havent unlocked your account yet. Please contact us using our Contact Form.");
+          }
+        } else if (error.request) {
+          console.error("No response received:", error.request);
+          alert("No response received. Please check your internet connection.");
+        } else {
+          console.error("Error:", error.message);
+          alert("An error occurred. Please try again later.");
+        }
       });
+      
   };
 
   // For img
@@ -113,19 +129,33 @@ export default function Home() {
         setIsLoading(false); // End loading animation
       })
       .catch((error) => {
-        console.error(error);
         setIsLoading(false);
+        if (error.response) {
+          const statusCode = error.response.status;
+          if (statusCode === 500) {
+            alert("Please log in before trying to chat with InnoAssist.");
+          } else if (statusCode === 403) {
+            // Handle 403 Forbidden Error
+            alert("It seems you havent unlocked your account yet. Please contact us using our Contact Form.");
+          }
+        } else if (error.request) {
+          console.error("No response received:", error.request);
+          alert("No response received. Please check your internet connection.");
+        } else {
+          console.error("Error:", error.message);
+          alert("An error occurred. Please try again later.");
+        }
       });
   };
 
   return (
-    <div className="container mx-auto max-w-full px-4">
-      <Navbar onNewChat={() => {}} handleSaveChat={handleSaveChat} />
-
-      <div className="flex flex-col bg-gray-900 min-h-screen">
-        <div className="flex-grow p-6 ">
+    <main>
+      <Navbar/>
+      <div className="flex flex-col bg-background-900 min-h-screen mt-16">
+        <Side chatLog={chatLog} updateChatLog={updateChatLog} />
+        <div className="flex-grow p-6 mt-4">
           <div className="flex flex-col space-y-4 mb-20">
-            {chatLog.map((message, index) => (
+            {chatLog?.map((message, index) => (
               <div
                 key={index}
                 className={`flex ${
@@ -178,6 +208,6 @@ export default function Home() {
           Send
         </button>
       </form>
-    </div>
+      </main>
   );
 }
