@@ -46,7 +46,7 @@ export default async function handler(req, res) {
           serialize("auth", token, {
             httpOnly: true,
             secure: true,
-            sameSite: "strict",
+            sameSite: "None",
             path: "/",
             maxAge: 7200 * 1000,
           })

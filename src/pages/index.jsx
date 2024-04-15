@@ -6,7 +6,13 @@ import Side from "@/components/Side";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState(""); // User input
-  const [chatLog, setChatLog] = useState([{ type: "ai", message: "Hello! I'm InnoAssist, your AI assistant. How can I help you today?" }]); 
+  const [chatLog, setChatLog] = useState([
+    {
+      type: "ai",
+      message:
+        "Hello! I'm InnoAssist, your AI assistant. How can I help you today?",
+    },
+  ]);
   const [isLoading, setIsLoading] = useState(false);
 
   let newChatLog = [];
@@ -19,7 +25,7 @@ export default function Home() {
     event.preventDefault();
     if (!inputValue || inputValue.length === 0) {
       return;
-  }   
+    }
     // check if user wants to generate an image
     if (
       inputValue.toLowerCase().includes("generate image") ||
@@ -45,12 +51,11 @@ export default function Home() {
       ];
       setChatLog(newChatLog); // Update chat log
       setInputValue(""); // Clear input field
-    }
-    else if(inputValue.toLowerCase()==="omae wa mou shindeiru") {
+    } else if (inputValue.toLowerCase() === "omae wa mou shindeiru") {
       newChatLog = [
         ...chatLog,
         { type: "user", message: "お前はもう死んでいる" },
-         { type: "ai", message: "何" },
+        { type: "ai", message: "何" },
       ];
       setChatLog(newChatLog);
       setInputValue("");
@@ -99,7 +104,9 @@ export default function Home() {
             alert("Please log in before trying to chat with InnoAssist.");
           } else if (statusCode === 403) {
             // Handle 403 Forbidden Error
-            alert("It seems you havent unlocked your account yet. Please contact us using our Contact Form.");
+            alert(
+              "It seems you havent unlocked your account yet. Please contact us using our Contact Form."
+            );
           }
         } else if (error.request) {
           console.error("No response received:", error.request);
@@ -109,7 +116,6 @@ export default function Home() {
           alert("An error occurred. Please try again later.");
         }
       });
-      
   };
 
   // For img
@@ -136,7 +142,9 @@ export default function Home() {
             alert("Please log in before trying to chat with InnoAssist.");
           } else if (statusCode === 403) {
             // Handle 403 Forbidden Error
-            alert("It seems you havent unlocked your account yet. Please contact us using our Contact Form.");
+            alert(
+              "It seems you havent unlocked your account yet. Please contact us using our Contact Form."
+            );
           }
         } else if (error.request) {
           console.error("No response received:", error.request);
@@ -150,7 +158,7 @@ export default function Home() {
 
   return (
     <main>
-      <Navbar/>
+      <Navbar />
       <div className="flex flex-col bg-background-900 min-h-screen mt-16">
         <Side chatLog={chatLog} updateChatLog={updateChatLog} />
         <div className="flex-grow p-6 mt-4">
@@ -208,6 +216,6 @@ export default function Home() {
           Send
         </button>
       </form>
-      </main>
+    </main>
   );
 }
