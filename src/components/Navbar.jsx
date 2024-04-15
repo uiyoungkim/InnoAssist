@@ -22,29 +22,25 @@ const handleLogout = () => {
 
 function Navbar() {
   return (
-    <nav className="bg-gray-800 shadow-lg w-full">
+    <nav className="bg-gray-800 shadow-lg w-full fixed top-0 z-50">
       <div className="w-full px-2 h-16 flex">
         <div className="w-full space-x-5 flex items-center justify-center">
-          <img
-            className="h-12 w-auto" 
-            src="/logo.innoAssist.png"
-            alt="Logo"
-          />
-          
-            <a
-              href="#"
-              className="text-text-300 hover:bg-secondary-600 hover:text-text-100 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Home
-            </a>
-           <Contact/>
-        <Authentication />
-        <button
-          onClick={handleLogout}
-          className="text-text-300 hover:bg-secondary-600 hover:text-text-100 px-3 py-2 rounded-md text-sm font-medium"
-        >
-          Logout
-        </button>
+          <img className="h-12 w-auto" src="/logo.innoAssist.png" alt="Logo" />
+
+          <a
+            href="#"
+            className="text-text-300 hover:bg-secondary-600 hover:text-text-100 px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Home
+          </a>
+          <Contact />
+          <Authentication />
+          <button
+            onClick={handleLogout}
+            className="text-text-300 hover:bg-secondary-600 hover:text-text-100 px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </nav>

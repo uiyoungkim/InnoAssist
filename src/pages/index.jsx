@@ -2,26 +2,26 @@ import axios from "axios";
 import { useState } from "react";
 import TypingAnimation from "@/components/TypingAnimation";
 import Navbar from "@/components/Navbar";
+import Side from "@/components/Side";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState(""); // User input
   const [chatLog, setChatLog] = useState([]); // Complete Chat log, updated with each message
   const [isLoading, setIsLoading] = useState(false);
 
+  
+  
   let newChatLog = [];
 
-  const handleSaveChat = async () => {
-    try {
-      await axios.post("/api/chat/saveChat", { chatLog });
-      console.log("Chat-Verlauf gespeichert.");
-    } catch (error) {
-      console.error("Fehler beim Speichern des Chat-Verlaufs:", error);
-    }
+  const updateChatLog = (chatData) => {
+    setChatLog(chatData);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    if (!inputValue || inputValue.length === 0) {
+      return;
+  }   
     // check if user wants to generate an image
     if (
       inputValue.toLowerCase().includes("generate image") ||
@@ -47,6 +47,15 @@ export default function Home() {
       ];
       setChatLog(newChatLog); // Update chat log
       setInputValue(""); // Clear input field
+    }
+    else if(inputValue.toLowerCase()==="omae wa mou shindeiru") {
+      newChatLog = [
+        ...chatLog,
+        { type: "user", message: "お前はもう死んでいる" },
+         { type: "ai", message: "何" },
+      ];
+      setChatLog(newChatLog);
+      setInputValue("");
     }
 
     // normal chat message
@@ -150,10 +159,11 @@ export default function Home() {
   return (
     <main>
       <Navbar/>
-      <div className="flex flex-col bg-gray-900 min-h-screen">
+      <div className="flex flex-col bg-gray-900 min-h-screen mt-16">
+        <Side chatLog={chatLog} updateChatLog={updateChatLog} />
         <div className="flex-grow p-6 ">
           <div className="flex flex-col space-y-4 mb-20">
-            {chatLog.map((message, index) => (
+            {chatLog?.map((message, index) => (
               <div
                 key={index}
                 className={`flex ${
