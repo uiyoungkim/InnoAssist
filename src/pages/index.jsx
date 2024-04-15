@@ -1,18 +1,50 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TypingAnimation from "@/components/TypingAnimation";
 import Navbar from "@/components/Navbar";
 import Side from "@/components/Side";
 
 export default function Home() {
-  const [inputValue, setInputValue] = useState(""); // User input
+  const [inputValue, setInputValue] = useState("");
+  const [userName, setUserName] = useState("");
+
+  const getUserName = async () => {
+    fetch("/api/user")
+      .then((response) => {
+        if (!response.ok) {
+          console.error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((username) => {
+        console.log("Success username:", username.username);
+        setUserName(username.username);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  useEffect(() => {
+    getUserName();
+  }, []);
+
   const [chatLog, setChatLog] = useState([
     {
       type: "ai",
-      message:
-        "Hello! I'm InnoAssist, your AI assistant. How can I help you today?",
+      message: `Please log in to access InnoAssist's features. If you don't have an account, feel free to register!`,
     },
   ]);
+  useEffect(() => {
+    if (userName !== "" && userName !== undefined) {
+      setChatLog([
+        {
+          type: "ai",
+          message: `Hello ${userName}! I'm InnoAssist, your AI assistant. How can I help you today?`,
+        },
+      ]);
+    }
+  }, [userName]);
   const [isLoading, setIsLoading] = useState(false);
 
   let newChatLog = [];
@@ -102,11 +134,13 @@ export default function Home() {
           const statusCode = error.response.status;
           if (statusCode === 500) {
             alert("Please log in before trying to chat with InnoAssist.");
+            updateChatLog([{ type: "ai", message: "Please log in to access InnoAssist's features. If you don't have an account, feel free to register!"}]);
           } else if (statusCode === 403) {
             // Handle 403 Forbidden Error
             alert(
               "It seems you havent unlocked your account yet. Please contact us using our Contact Form."
             );
+            updateChatLog([{ type: "ai", message: "Please log in to access InnoAssist's features. If you don't have an account, feel free to register!"}]);
           }
         } else if (error.request) {
           console.error("No response received:", error.request);
@@ -158,10 +192,10 @@ export default function Home() {
 
   return (
     <main>
-      <Navbar />
+      <Navbar updateChatLog={updateChatLog} />
       <div className="flex flex-col bg-background-900 min-h-screen mt-16">
         <Side chatLog={chatLog} updateChatLog={updateChatLog} />
-        <div className="flex-grow p-6 mt-4">
+        <div className="flex-grow p-6 mt-10">
           <div className="flex flex-col space-y-4 mb-20">
             {chatLog?.map((message, index) => (
               <div

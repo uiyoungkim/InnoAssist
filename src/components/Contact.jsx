@@ -152,7 +152,7 @@ function Contact() {
                 Send message
               </Button>
               <Button
-                className="text-primary-200 hover:text-primary-50"
+                className="text-primary-200 hover:text-primary-50 bg-background-700 hover:bg-primary-400 mt-2"
                 onClick={() => {
                   setOpenContactModal(false);
                   setEmailError(false);
