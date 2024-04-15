@@ -32,26 +32,26 @@ function Authentication() {
       return;
     }
 
-    fetch('http://localhost:3000/api/user', {
-      method: 'POST',
+    fetch("http://localhost:3000/api/user", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email: email,
-        password: password
+        password: password,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
+        console.log("Success:", data);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
       });
-      setEmailError("");
-      setPasswordError("");
-      setOpenLoginModal(false);
+    setEmailError("");
+    setPasswordError("");
+    setOpenLoginModal(false);
   };
 
   const handleRegister = () => {
@@ -71,98 +71,204 @@ function Authentication() {
       return;
     }
 
-    fetch('http://localhost:3000/api/user', {
-      method: 'POST',
+    fetch("http://localhost:3000/api/user", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email: email,
         password: password,
-        username: username
+        username: username,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
+        console.log("Success:", data);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
       });
-      setEmailError("");
-      setPasswordError("");
-      setUsernameError("");
-      setOpenRegisterModal(false);
-      setOpenLoginModal(true);
+    setEmailError("");
+    setPasswordError("");
+    setUsernameError("");
+    setOpenRegisterModal(false);
+    setOpenLoginModal(true);
   };
 
   return (
     <>
-      <Button className="text-text-300 hover:bg-secondary-600 hover:text-text-100" onClick={() => setOpenLoginModal(true)}>Sign in</Button>
-      <Button className="text-text-300 hover:bg-secondary-600 hover:text-text-100" onClick={() => setOpenRegisterModal(true)}>Create account</Button>
+      <Button
+        className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
+        onClick={() => {
+          setOpenLoginModal(true);
+          setOpenRegisterModal(false);
+        }}
+      >
+        Sign in
+      </Button>
+      <Button
+        className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
+        onClick={() => {
+          setOpenRegisterModal(true);
+          setOpenLoginModal(false);
+        }}
+      >
+        Create account
+      </Button>
 
-      <Modal show={openLoginModal} className="flex w-1/4 h-1/2 justify-center border-primary-500 mx-auto mt-16" popup onClose={() => setOpenLoginModal(false)} initialFocus={emailInputRef}>
+      <Modal
+        show={openLoginModal}
+        className="flex w-1/4 h-fit justify-center bg-background-600 border-primary-500 mx-auto mt-32 text-text-50"
+        popup
+        onClose={() => setOpenLoginModal(false)}
+        initialFocus={emailInputRef}
+      >
         <Modal.Header />
         <Modal.Body>
           <div className="space-y-6">
-            <h3 className="text-xl font-medium text-text-900">Sign in to your InnoAssist Account</h3>
+            <h3 className="text-xl font-medium">
+              Sign in to your InnoAssist Account
+            </h3>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="email" value="Your email" />
               </div>
-              <TextInput type="email" id="email" ref={emailInputRef} placeholder="name@company.com" required />
+              <TextInput
+                type="email"
+                id="email"
+                ref={emailInputRef}
+                placeholder="John-Cena@WWE.com"
+                required
+                className="text-text-800"
+              />
               {emailError && <p className="text-red-500">{emailError}</p>}
             </div>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="password" value="Your password" />
               </div>
-              <TextInput id="password" type="password" ref={passwordInputRef} required />
+              <TextInput
+                id="password"
+                type="password"
+                ref={passwordInputRef}
+                placeholder="123"
+                required
+                className="text-text-800"
+              />
               {passwordError && <p className="text-red-500">{passwordError}</p>}
             </div>
             <div className="w-full">
-              <Button className="bg-primary-500 hover:bg-primary-600" onClick={handleLogin}>Log in to your account</Button>
-              <Button className="text-primary-500 hover:text-primary-600" onClick={() => { setOpenLoginModal(false)}}>Close</Button>
+              <Button
+                className="bg-primary-200 hover:bg-primary-400"
+                onClick={handleLogin}
+              >
+                Log in to your account
+              </Button>
+              <Button
+                className="text-primary-200 hover:text-primary-100"
+                onClick={() => {
+                  setOpenLoginModal(false);
+                }}
+              >
+                Close
+              </Button>
             </div>
             <div className="flex justify-center mt-4 ">
-              <Button className="text-text-900" onClick={() => { setOpenLoginModal(false); setOpenRegisterModal(true); }}>Don't have an account? Register</Button>
+              <Button
+                className="hover:text-primary-300"
+                onClick={() => {
+                  setOpenLoginModal(false);
+                  setOpenRegisterModal(true);
+                }}
+              >
+                Don't have an account? Register
+              </Button>
             </div>
           </div>
         </Modal.Body>
       </Modal>
 
-      <Modal show={openRegisterModal} className="flex w-1/4 h-3/4 justify-center border-primary-500 mx-auto mt-16" popup onClose={() => setOpenRegisterModal(false)} initialFocus={emailInputRef}>
+      <Modal
+        show={openRegisterModal}
+        className="flex w-1/4 h-fit justify-center bg-background-600 border-primary-500  mx-auto mt-32 text-text-50"
+        popup
+        onClose={() => setOpenRegisterModal(false)}
+        initialFocus={emailInputRef}
+      >
         <Modal.Header />
         <Modal.Body>
           <div className="space-y-6">
-            <h3 className="text-xl font-medium text-text-900">Create your InnoAssist Account</h3>
+            <h3 className="text-xl font-medium">
+              Create your InnoAssist Account
+            </h3>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="email" value="Your email" />
               </div>
-              <TextInput id="email" type="email" ref={emailInputRef} placeholder="name@company.com" required />
+              <TextInput
+                id="email"
+                type="email"
+                ref={emailInputRef}
+                placeholder="John-Cena@WWE.com"
+                required
+                className="text-text-800"
+              />
               {emailError && <p className="text-red-500">{emailError}</p>}
-           </div>
+            </div>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="password" value="Your password" />
               </div>
-              <TextInput id="password" type="password" ref={passwordInputRef} required />
+              <TextInput
+                id="password"
+                type="password"
+                ref={passwordInputRef}
+                placeholder="123"
+                required
+                className="text-text-800"
+              />
               {passwordError && <p className="text-red-500">{passwordError}</p>}
             </div>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="username" value="Username" />
               </div>
-              <TextInput id="username" ref={usernameInputRef} placeholder="Your username" required />
+              <TextInput
+                id="username"
+                ref={usernameInputRef}
+                placeholder="John Cena"
+                required
+                className="text-text-800"
+              />
               {usernameError && <p className="text-red-500">{usernameError}</p>}
             </div>
             <div className="w-full">
-              <Button className="bg-primary-500 hover:bg-primary-600" onClick={handleRegister}>Create account</Button>
-              <Button className="text-primary-500 hover:text-primary-600" onClick={() => { setOpenRegisterModal(false)}}>Close</Button>
+              <Button
+                className="bg-primary-200 hover:bg-primary-400"
+                onClick={handleRegister}
+              >
+                Create account
+              </Button>
+              <Button
+                className="text-primary-200 hover:text-primary-100"
+                onClick={() => {
+                  setOpenRegisterModal(false);
+                }}
+              >
+                Close
+              </Button>
             </div>
             <div className="flex justify-center mt-4">
-              <Button className="text-text-900" onClick={() => { setOpenRegisterModal(false); setOpenLoginModal(true); }}>Already have an account? Sign in</Button>
+              <Button
+                className="hover:text-primary-300"
+                onClick={() => {
+                  setOpenRegisterModal(false);
+                  setOpenLoginModal(true);
+                }}
+              >
+                Already have an account? Sign in
+              </Button>
             </div>
           </div>
         </Modal.Body>

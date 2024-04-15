@@ -151,9 +151,9 @@ export default function Home() {
   return (
     <main>
       <Navbar/>
-      <div className="flex flex-col bg-gray-900 min-h-screen mt-16">
+      <div className="flex flex-col bg-background-900 min-h-screen mt-16">
         <Side chatLog={chatLog} updateChatLog={updateChatLog} />
-        <div className="flex-grow p-6 mt-16">
+        <div className="flex-grow p-6 mt-4">
           <div className="flex flex-col space-y-4 mb-20">
             {chatLog?.map((message, index) => (
               <div

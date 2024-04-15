@@ -111,7 +111,7 @@ function Side({ chatLog, updateChatLog }) {
         Toggle Sidebar
       </Button>
       {open && (
-        <Sidebar className="h-auto bg-background-800 text-background-300 mt-14 fixed">
+        <Sidebar className="h-auto bg-background-800 text-background-100 mt-14 fixed">
           <div className="my-3 space-y-2">
             <button
               className="bg-background-600 rounded-md w-full hover:bg-primary-400"
@@ -157,7 +157,7 @@ function Side({ chatLog, updateChatLog }) {
       )}
       <Modal
         show={openChatNameModal}
-        className="flex w-1/4 h-5/6 justify-center border-primary-600 mx-auto mt-16"
+        className="flex w-1/4 h-fit justify-center text-text-50 bg-background-600 border-primary-500 mx-auto mt-28"
         popup
         onClose={() => setOpenChatNameModal(false)}
         initialFocus={chatNameInputRef}
@@ -165,7 +165,7 @@ function Side({ chatLog, updateChatLog }) {
         <Modal.Header />
         <Modal.Body>
           <div className="space-y-6">
-            <h3 className="text-xl font-medium text-text-900">
+            <h3 className="text-xl font-medium">
               Please give this Chat a name
             </h3>
             <div>
@@ -177,18 +177,19 @@ function Side({ chatLog, updateChatLog }) {
                 ref={chatNameInputRef}
                 placeholder="Chat 1"
                 required
+                className="text-text-800"
               />
               {chatNameError && <p className="text-red-500">{chatNameError}</p>}
             </div>
             <div className="w-full">
               <Button
-                className="bg-primary-600 hover:bg-primary-400"
+                className="bg-primary-200 hover:bg-primary-400"
                 onClick={saveChat}
               >
                 Save Chat
               </Button>
               <Button
-                className="text-primary-600 hover:text-primary-400"
+                className="text-primary-200 hover:text-primary-50"
                 onClick={() => {
                   setOpenChatNameModal(false);
                 }}
