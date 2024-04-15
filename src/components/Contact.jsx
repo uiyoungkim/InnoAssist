@@ -74,14 +74,14 @@ function Contact() {
       </Button>
       <Modal
         show={openContactModal}
-        className="flex w-1/4 h-fit justify-center bg-background-600 border-primary-500 mx-auto mt-28"
+        className="flex w-1/2 h-fit justify-center bg-background-600 border-primary-500 mx-auto mt-28"
         popup
         onClose={() => setOpenContactModal(false)}
         initialFocus={emailInputRef}
       >
         <Modal.Header />
         <Modal.Body className="text-text-50">
-          <div className="space-y-6">
+          <div>
             <h2>
               Use this Form if you want to unlock your Account for usage of
               InnoAssist
@@ -146,19 +146,19 @@ function Contact() {
             </div>
             <div className="w-full">
               <Button
-                className="bg-primary-200 hover:bg-primary-400"
+                className="bg-primary-200 hover:bg-primary-400 my-2"
                 onClick={handleContact}
               >
                 Send message
               </Button>
               <Button
-                className="text-primary-200 hover:text-primary-50 bg-background-700 hover:bg-primary-400 mt-2"
+                className="text-primary-200 hover:text-primary-50 bg-background-700 hover:bg-primary-400"
                 onClick={() => {
                   setOpenContactModal(false);
                   setEmailError(false);
-                    setUsernameError(false);
-                    setSubjectError(false);
-                    setMessageError(false);
+                  setUsernameError(false);
+                  setSubjectError(false);
+                  setMessageError(false);
                 }}
               >
                 Close
