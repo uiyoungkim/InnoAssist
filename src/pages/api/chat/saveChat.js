@@ -25,9 +25,9 @@ export default async function handler(req, res) {
       chatName: chatName,
     });
 
-    res.status(200).json({ message: "Chat-Verlauf erfolgreich gespeichert" });
+    res.status(200).json({ message: "ChatLog has been saved successfully" });
   } catch (error) {
-    console.error("Fehler beim Speichern des Chat-Verlaufs:", error);
+    console.error("Something went wrong  with saving the chat log: ", error);
     res.status(500).json({ message: "Something went wrong" });
   }
 }

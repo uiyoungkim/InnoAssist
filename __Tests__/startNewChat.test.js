@@ -14,7 +14,7 @@ describe("POST /api/chat/start", () => {
 
     expect(res._getStatusCode()).toBe(200);
     expect(JSON.parse(res._getData())).toEqual({
-      message: "Neuer Chat erfolgreich gestartet",
+      message: "new Chat has been started successfully !",
     });
   });
 
@@ -31,7 +31,7 @@ describe("POST /api/chat/start", () => {
 
     expect(res._getStatusCode()).toBe(500);
     expect(JSON.parse(res._getData())).toEqual({
-      message: "Etwas ist schief gelaufen",
+      message: "Something went wrong",
     });
   });
 
@@ -47,7 +47,7 @@ describe("POST /api/chat/start", () => {
 
     expect(res._getStatusCode()).toBe(405);
     expect(JSON.parse(res._getData())).toEqual({
-      message: "Methode nicht erlaubt - POST erforderlich",
+      message: "Method not allowed - Should be Post",
     });
   });
 });

@@ -13,7 +13,7 @@ describe("Authentication API Handler Tests", () => {
 
     expect(res._getStatusCode()).toBe(200);
     expect(JSON.parse(res._getData())).toEqual({
-      message: "Login erfolgreich.",
+      message: "Login Sucessful",
     });
   });
   // Test case for successful registration
@@ -36,7 +36,7 @@ describe("Authentication API Handler Tests", () => {
 
     expect(res._getStatusCode()).toBe(201);
     expect(JSON.parse(res._getData())).toEqual({
-      message: "Benutzer erfolgreich registriert.",
+      message: "User registered successfully!",
     });
   });
 
@@ -51,7 +51,7 @@ describe("Authentication API Handler Tests", () => {
 
     expect(res._getStatusCode()).toBe(200);
     expect(JSON.parse(res._getData())).toEqual({
-      message: "Logout erfolgreich.",
+      message: "Sucessfully Logged Out",
     });
   });
 });

@@ -2,7 +2,7 @@ import handler from "@/pages/api/chat/saveChat";
 import { createMocks } from "node-mocks-http";
 
 describe("POST /api/chat/saveChat", () => {
-  test("sollte mit 200 Statuscode und Erfolgsmeldung antworten", async () => {
+  test("should reply with 200 statuscode and message", async () => {
     const { req, res } = createMocks({
       method: "POST",
       body: {
@@ -24,11 +24,11 @@ describe("POST /api/chat/saveChat", () => {
 
     expect(res._getStatusCode()).toBe(200);
     expect(JSON.parse(res._getData())).toEqual({
-      message: "Chat-Verlauf erfolgreich gespeichert",
+      message: "ChatLog has been saved successfully",
     });
   });
 
-  test("sollte mit 500 Statuscode und Fehlermeldung antworten, wenn die Body fehlt", async () => {
+  test("should reply with statuscode 500", async () => {
     const { req, res } = createMocks({
       method: "POST",
 
@@ -46,7 +46,7 @@ describe("POST /api/chat/saveChat", () => {
     });
   });
 
-  test("sollte mit 405 Statuscode antworten für nicht-POST-Anfragen", async () => {
+  test("should reply with statuscode 405", async () => {
     const { req, res } = createMocks({
       method: "GET", // Verwendung einer nicht unterstützten Methode
       body: {

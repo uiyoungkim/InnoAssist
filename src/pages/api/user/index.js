@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       const userId = extractUserId(req);
       const user = await db("user").where("UserID", userId).first();
       if (!user) {
-        return res.status(404).json({ error: "Benutzer nicht gefunden." });
+        return res.status(404).json({ error: "User not found" });
       }
 
       // Sende den Benutzernamen als Antwort
@@ -28,12 +28,11 @@ export default async function handler(req, res) {
       ) {
         // Login Logik
         const user = await db("user").where("Email", email).first();
-        if (!user)
-          return res.status(404).json({ error: "Benutzer nicht gefunden." });
+        if (!user) return res.status(404).json({ error: "User not found" });
 
         const passwordMatch = await argon2.verify(user.PasswordHash, password);
         if (!passwordMatch)
-          return res.status(401).json({ error: "Ungültiges Passwort." });
+          return res.status(401).json({ error: "Wrong password" });
 
         const token = jwt.sign(
           { userId: user.UserID, email: user.Email },
@@ -52,7 +51,7 @@ export default async function handler(req, res) {
           })
         );
 
-        res.status(200).json({ message: "Login erfolgreich." });
+        res.status(200).json({ message: "Login Sucessful" });
       } else if (
         "email" in req.body &&
         "password" in req.body &&
@@ -61,7 +60,7 @@ export default async function handler(req, res) {
         // Registrierungslogik
         const existingUser = await db("user").where("Email", email).first();
         if (existingUser) {
-          return res.status(400).json({ error: "Benutzer existiert bereits." });
+          return res.status(400).json({ error: "Already Exisiting User" });
         }
 
         const hashedPassword = await argon2.hash(password);
@@ -71,7 +70,7 @@ export default async function handler(req, res) {
           PasswordHash: hashedPassword,
         });
 
-        res.status(201).json({ message: "Benutzer erfolgreich registriert." });
+        res.status(201).json({ message: "User registered successfully!" });
       } else if (req.body.action === "logout") {
         // Logout-Logik
         res.setHeader(
@@ -85,9 +84,9 @@ export default async function handler(req, res) {
           })
         );
 
-        res.status(200).json({ message: "Logout erfolgreich." });
+        res.status(200).json({ message: "Sucessfully Logged Out" });
       } else {
-        return res.status(400).json({ error: "Ungültige Anfrage." });
+        return res.status(400).json({ error: "Not Valid Action" });
       }
     } else {
       // Methode nicht unterstützt
@@ -97,12 +96,12 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error("Fehler:", error);
     if (
-      error.message === "Nicht authentifiziert." ||
-      error.message === "Token ungültig."
+      error.message === "Not Authenticated" ||
+      error.message === "Not Valid Token"
     ) {
       res.status(401).json({ error: error.message });
     } else {
-      res.status(500).json({ error: "Interner Serverfehler." });
+      res.status(500).json({ error: "interner Serverdown" });
     }
   }
 }

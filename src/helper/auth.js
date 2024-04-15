@@ -7,14 +7,14 @@ export function extractUserId(req) {
   const token = cookies.auth;
 
   if (!token) {
-    throw new Error("Nicht authentifiziert.");
+    throw new Error("Not Authenticated");
   }
 
   let decoded;
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {
-    throw new Error("Token ungültig.");
+    throw new Error("Not Valid Token");
   }
 
   return decoded.userId;
