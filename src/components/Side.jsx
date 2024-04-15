@@ -115,7 +115,7 @@ function Side({ chatLog, updateChatLog }) {
           <div className="my-3 space-y-2">
             <button
               className="bg-background-600 rounded-md w-full hover:bg-primary-400"
-              onClick={updateChatLog([
+              onClick={() => updateChatLog([
                 {
                   type: "ai",
                   message:
