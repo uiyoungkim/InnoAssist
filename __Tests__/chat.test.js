@@ -2,7 +2,7 @@ import { createMocks } from "node-mocks-http";
 import handler from "@/pages/api/chat";
 
 describe("/api/chat Integrationstest", () => {
-  test("POST-Anfrage sendet eine echte Anfrage und vergleicht mit tatsächlicher Antwort", async () => {
+  test("mathematical prompt to see if it makes sense", async () => {
     const { req, res } = createMocks({
       method: "POST",
       headers: {

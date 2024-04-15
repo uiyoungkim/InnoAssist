@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res
       .status(405)
-      .json({ message: "Methode nicht erlaubt - GET erforderlich" });
+      .json({ message: "Method not allowed - Should be GET" });
   }
 
   try {
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       .orderBy("createdAt", "desc");
 
     if (!chatLogs || chatLogs.length === 0) {
-      return res.status(404).json({ message: "Chat-Verläufe nicht gefunden" });
+      return res.status(404).json({ message: "couldn't find any ChatLog" });
     }
 
     // Umwandeln der chatData von String zu Objekt, falls notwendig
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
     res.status(200).json(chatsData);
   } catch (error) {
-    console.error("Fehler beim Abrufen des Chat-Verlaufs:", error);
-    res.status(500).json({ message: "Etwas ist schief gelaufen" });
+    console.error("Something went wrong by finding Chat", error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 }

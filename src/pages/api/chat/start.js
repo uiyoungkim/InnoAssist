@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res
       .status(405)
-      .json({ message: "Methode nicht erlaubt - POST erforderlich" });
+      .json({ message: "Method not allowed - Should be Post" });
   }
 
   try {
@@ -26,9 +26,11 @@ export default async function handler(req, res) {
       createdAt: new Date(),
     });
 
-    res.status(200).json({ message: "Neuer Chat erfolgreich gestartet" });
+    res
+      .status(200)
+      .json({ message: "new Chat has been started successfully !" });
   } catch (error) {
-    console.error("Fehler beim Starten eines neuen Chats:", error);
-    res.status(500).json({ message: "Etwas ist schief gelaufen" });
+    console.error("something went wrong:", error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 }
