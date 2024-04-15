@@ -1,4 +1,4 @@
-import React, { useRef ,useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Button, Modal, TextInput, Sidebar, Label } from "flowbite-react";
 
 function Side({ chatLog, updateChatLog }) {
@@ -8,8 +8,30 @@ function Side({ chatLog, updateChatLog }) {
   const [chatNameError, setChatNameError] = useState("");
   const [chatLogError, setChatLogError] = useState("");
   const [previousChats, setPreviousChats] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const getUserName = async () => {
+    fetch("http://localhost:3000/api/user")
+      .then((response) => {
+        if (!response.ok) {
+          console.error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((userName) => {
+        console.log("Success:", userName);
+        setIsLoggedIn(true);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   const loadChats = async () => {
+    if (!isLoggedIn) {
+      alert("Please log in before trying to load chats.");
+      return;
+    }
     try {
       const response = await fetch("http://localhost:3000/api/chat/getChat");
       const data = await response.json();
@@ -21,10 +43,20 @@ function Side({ chatLog, updateChatLog }) {
   };
 
   useEffect(() => {
-    loadChats();
+    getUserName();
   }, []);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      loadChats();
+    }
+  }, [isLoggedIn]);
+
   const saveChat = () => {
+    if (!isLoggedIn) {
+      alert("Please log in before trying to save chat.");
+      return;
+    }
     if (!chatLog || Object.keys(chatLog).length === 0) {
       setChatLogError("Chat log cannot be empty.");
       return;
@@ -39,43 +71,57 @@ function Side({ chatLog, updateChatLog }) {
       return;
     }
     setOpenChatNameModal(false);
-    try {
-      fetch("http://localhost:3000/api/chat/saveChat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          chatLog: chatLog,
-          chatName: chatNameInputRef.current.value,
-        }),
+    fetch("http://localhost:3000/api/chat/saveChat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chatLog: chatLog,
+        chatName: chatNameInputRef.current.value,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.error("Network response was not ok");
+        }
+        return response.json();
       })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    } catch (error) {
-      console.error("Error:", error);
-    }
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   const handleChatItemClick = (chatName) => {
-    const selectedChat = previousChats.find((chat) => chat.chatName === chatName);
+    const selectedChat = previousChats.find(
+      (chat) => chat.chatName === chatName
+    );
     updateChatLog(selectedChat.chatData);
   };
 
   return (
-      <>
-      <Button className="bg-background-600 rounded-md w-full hover:bg-primary-400 fixed" onClick={() => setOpen(!open)}>Toggle Sidebar</Button>
+    <>
+      <Button
+        className="bg-background-600 rounded-md w-full hover:bg-primary-400 fixed"
+        onClick={() => setOpen(!open)}
+      >
+        Toggle Sidebar
+      </Button>
       {open && (
         <Sidebar className="h-full bg-background-800 text-background-300 mt-14">
           <div className="my-3 space-y-2">
-          <button
+            <button
               className="bg-background-600 rounded-md w-full hover:bg-primary-400"
-              onClick={updateChatLog([])}
+              onClick={updateChatLog([
+                {
+                  type: "ai",
+                  message:
+                    "Hello! I'm InnoAssist, your AI assistant. How can I help you today?",
+                },
+              ])}
             >
               Clear Chat
             </button>
@@ -85,9 +131,7 @@ function Side({ chatLog, updateChatLog }) {
             >
               Save Chat
             </button>
-            {chatLogError && (
-              <p className="text-red-500">{chatLogError}</p>
-            )}
+            {chatLogError && <p className="text-red-500">{chatLogError}</p>}
             <button
               className="bg-background-600 rounded-md w-full hover:bg-primary-400"
               onClick={loadChats}
@@ -97,15 +141,16 @@ function Side({ chatLog, updateChatLog }) {
           </div>
           <Sidebar.Items>
             <Sidebar.ItemGroup>
-              {previousChats?.map((chat) => (
-                <button
-                  key={chat.id}
-                  className="bg-background-800 rounded-md w-full hover:bg-primary-400"
-                  onClick={() => handleChatItemClick(chat.chatName)}
-                >
-                  {chat.chatName}
-                </button>
-              ))}
+              {previousChats.length > 0 &&
+                previousChats.map((chat) => (
+                  <button
+                    key={chat.id}
+                    className="bg-background-800 rounded-md w-full hover:bg-primary-400"
+                    onClick={() => handleChatItemClick(chat.chatName)}
+                  >
+                    {chat.chatName}
+                  </button>
+                ))}
             </Sidebar.ItemGroup>
           </Sidebar.Items>
         </Sidebar>
@@ -133,9 +178,7 @@ function Side({ chatLog, updateChatLog }) {
                 placeholder="Chat 1"
                 required
               />
-              {chatNameError && (
-                <p className="text-red-500">{chatNameError}</p>
-              )}
+              {chatNameError && <p className="text-red-500">{chatNameError}</p>}
             </div>
             <div className="w-full">
               <Button

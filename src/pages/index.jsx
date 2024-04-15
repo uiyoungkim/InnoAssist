@@ -6,11 +6,9 @@ import Side from "@/components/Side";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState(""); // User input
-  const [chatLog, setChatLog] = useState([]); // Complete Chat log, updated with each message
+  const [chatLog, setChatLog] = useState([{ type: "ai", message: "Hello! I'm InnoAssist, your AI assistant. How can I help you today?" }]); 
   const [isLoading, setIsLoading] = useState(false);
 
-  
-  
   let newChatLog = [];
 
   const updateChatLog = (chatData) => {
@@ -69,12 +67,6 @@ export default function Home() {
       sendMessage(inputValue, newChatLog); // Call sendMessage function with user input and updated chat log
       setInputValue(""); // Clear input field
     }
-  };
-
-  const resetChat = () => {
-    // Reset chat log and input field
-    setInputValue("");
-    setChatLog([]);
   };
 
   // Client Side
