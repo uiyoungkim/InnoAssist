@@ -7,10 +7,30 @@ function Authentication() {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const usernameInputRef = useRef();
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+
+  const validateEmail = (email) => {
+    // Regular expression for validating an email address
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
 
   const handleLogin = () => {
     const email = emailInputRef.current.value;
     const password = passwordInputRef.current.value;
+
+    if (!email || !password) {
+      setEmailError(!email ? "Email field cannot be empty." : "");
+      setPasswordError(!password ? "Password field cannot be empty." : "");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
 
     fetch('http://localhost:3000/api/user', {
       method: 'POST',
@@ -29,12 +49,27 @@ function Authentication() {
       .catch((error) => {
         console.error('Error:', error);
       });
+      setEmailError("");
+      setPasswordError("");
+      setOpenLoginModal(false);
   };
 
   const handleRegister = () => {
     const email = emailInputRef.current.value;
     const password = passwordInputRef.current.value;
     const username = usernameInputRef.current.value;
+
+    if (!email || !password || !username) {
+      setEmailError(!email ? "Email field cannot be empty." : "");
+      setPasswordError(!password ? "Password field cannot be empty." : "");
+      setUsernameError(!username ? "Username field cannot be empty." : "");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
 
     fetch('http://localhost:3000/api/user', {
       method: 'POST',
@@ -54,6 +89,11 @@ function Authentication() {
       .catch((error) => {
         console.error('Error:', error);
       });
+      setEmailError("");
+      setPasswordError("");
+      setUsernameError("");
+      setOpenRegisterModal(false);
+      setOpenLoginModal(true);
   };
 
   return (
@@ -70,13 +110,15 @@ function Authentication() {
               <div className="mb-2 block">
                 <Label htmlFor="email" value="Your email" />
               </div>
-              <TextInput id="email" ref={emailInputRef} placeholder="name@company.com" required />
+              <TextInput type="email" id="email" ref={emailInputRef} placeholder="name@company.com" required />
+              {emailError && <p className="text-red-500">{emailError}</p>}
             </div>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="password" value="Your password" />
               </div>
               <TextInput id="password" type="password" ref={passwordInputRef} required />
+              {passwordError && <p className="text-red-500">{passwordError}</p>}
             </div>
             <div className="w-full">
               <Button className="bg-primary-500 hover:bg-primary-600" onClick={handleLogin}>Log in to your account</Button>
@@ -98,19 +140,22 @@ function Authentication() {
               <div className="mb-2 block">
                 <Label htmlFor="email" value="Your email" />
               </div>
-              <TextInput id="email" ref={emailInputRef} placeholder="name@company.com" required />
-            </div>
+              <TextInput id="email" type="email" ref={emailInputRef} placeholder="name@company.com" required />
+              {emailError && <p className="text-red-500">{emailError}</p>}
+           </div>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="password" value="Your password" />
               </div>
               <TextInput id="password" type="password" ref={passwordInputRef} required />
+              {passwordError && <p className="text-red-500">{passwordError}</p>}
             </div>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="username" value="Username" />
               </div>
               <TextInput id="username" ref={usernameInputRef} placeholder="Your username" required />
+              {usernameError && <p className="text-red-500">{usernameError}</p>}
             </div>
             <div className="w-full">
               <Button className="bg-primary-500 hover:bg-primary-600" onClick={handleRegister}>Create account</Button>
