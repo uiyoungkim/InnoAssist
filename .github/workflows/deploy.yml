@@ -4,17 +4,7 @@ jobs:
   vercel: 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-        #add env file to .env.local
-      - name: Set Env Vars on Vercel Project
-        uses: dkershner6/vercel-set-env-action@v1
-        with:
-          token: ${{ secrets.VERCEL_TOKEN }}
-          teamId: ${{ secrets.VERCEL_TEAM_ID }} # optional, without will use personal
-          projectName: nexturl # project name in Vercel
-          envVariableKeys: MONGODB_URL,MONGODB_DB
-              
+      - uses: actions/checkout@v2     
 
     
 
