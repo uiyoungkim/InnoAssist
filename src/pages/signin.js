@@ -38,19 +38,21 @@ export default function SignIn() {
       email: data.get("email"),
       password: data.get("password"),
     });
-    fetch(
-      "https://inno-assist-git-main-uiyoungkims-projects.vercel.app/api/user",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: data.get("email"),
-          password: data.get("password"),
-        }),
-      }
-    )
+
+    let baseurl = process.env.localhostURL;
+    let url = "api/user";
+    let requestApiURL = baseurl + url;
+
+    fetch("http://localhost:3000/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: data.get("email"),
+        password: data.get("password"),
+      }),
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);

@@ -15,6 +15,7 @@ export default async function handler(req, res) {
   // Vergesse hier nicht chatName in Frontend mitzugeben!!!
 
   const userId = extractUserId(req); // UserID extrahieren
+  console.log(userId + " tried to write a new Message");
   console.log("Chat-Verlauf:", chatLog);
 
   try {
