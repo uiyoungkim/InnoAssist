@@ -1,8 +1,9 @@
 name: Deploy to Vercel
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches: [main, develop]
+    pull_request:
+        branches: [main, develop]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -12,5 +13,4 @@ jobs:
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }
-}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}

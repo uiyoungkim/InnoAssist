@@ -3,7 +3,8 @@
         "file:///c%3A/Users/UiyoungKim/.vscode/extensions/atlassian.atlascode-3.0.10/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
         "https://json.schemastore.org/github-workflow.json": [
             "file:///c%3A/Users/UiyoungKim/Projects/kim-gpt-openai/.github/workflows/deploy.yml",
-            "file:///c%3A/Users/UiyoungKim/Projects/kim-gpt-openai/.github/workflows/main.yml"
+            "file:///c%3A/Users/UiyoungKim/Projects/kim-gpt-openai/.github/workflows/main.yml",
+            "file:///c%3A/Users/UiyoungKim/Projects/kim-gpt-openai/.github/workflows/CD.main.yml"
         ]
     }
 }
