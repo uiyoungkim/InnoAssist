@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Button, Modal, TextInput, Sidebar, Label } from "flowbite-react";
 
 function Side({ chatLog, updateChatLog }) {
-  const [open, setOpen] = useState(true); // State variable to track sidebar open/close
+  const [open, setOpen] = useState(false);
   const [openChatNameModal, setOpenChatNameModal] = useState(false);
   const chatNameInputRef = useRef();
   const [chatNameError, setChatNameError] = useState("");
@@ -11,7 +11,7 @@ function Side({ chatLog, updateChatLog }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const getUserName = async () => {
-    fetch("http://localhost:3000/api/user")
+    fetch("/api/user")
       .then((response) => {
         if (!response.ok) {
           console.error("Network response was not ok");
@@ -33,7 +33,7 @@ function Side({ chatLog, updateChatLog }) {
       return;
     }
     try {
-      const response = await fetch("http://localhost:3000/api/chat/getChat");
+      const response = await fetch("/api/chat/getChat");
       const data = await response.json();
       setPreviousChats(data);
       console.log(JSON.stringify(data));
@@ -71,7 +71,7 @@ function Side({ chatLog, updateChatLog }) {
       return;
     }
     setOpenChatNameModal(false);
-    fetch("http://localhost:3000/api/chat/saveChat", {
+    fetch("/api/chat/saveChat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

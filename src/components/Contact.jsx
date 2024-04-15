@@ -39,7 +39,7 @@ function Contact() {
       return;
     }
 
-    fetch("http://localhost:3000/api/email/contact", {
+    fetch("/api/email/contact", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
