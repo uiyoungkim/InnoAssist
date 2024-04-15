@@ -6,8 +6,7 @@ describe("/api/chat Integrationstest", () => {
     const { req, res } = createMocks({
       method: "POST",
       headers: {
-        cookie:
-          "auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImVtYWlsIjoidWl5b3VuZ2tpbTIwMDJAZy5jb20iLCJpYXQiOjE3MTI2NzgzMTQsImV4cCI6MTcxOTg3ODMxNH0.ZOvKEMjh-8yhBmI4-ksjCa3-hh5IwrHqC7PAGkQ3INg", // Stelle sicher, dass dies ein gültiger Token ist
+        cookie: "auth=" + process.env.Token,
       },
       body: {
         model: "gpt-4-turbo-preview",
