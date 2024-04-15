@@ -1,16 +1,15 @@
-name: Deploy to Vercel
-on:
-  push:
-    branches:
-      - main
+name: deploy nexturl to vercel
+on: [push, pull_request]
 jobs:
-  deploy:
+  vercel: 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Deploy to Vercel
+      - uses: actions/checkout@v2
+
+       # deploy app to vercel
+      - name: deploy site to vercel      
         uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }
-}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Require        
+          vercel-org-id: ${{ secrets.ORG_ID}}  #Required
+          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
