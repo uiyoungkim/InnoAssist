@@ -32,7 +32,7 @@ function Authentication() {
       return;
     }
 
-    fetch("http://localhost:3000/api/user", {
+    fetch("/api/user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -71,7 +71,7 @@ function Authentication() {
       return;
     }
 
-    fetch("http://localhost:3000/api/user", {
+    fetch("/api/user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
