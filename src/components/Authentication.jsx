@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
-import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
+import React, { useRef, useState, useEffect } from "react";
+import { Button, Label, Modal, TextInput } from "flowbite-react";
 
-function Authentication() {
+function Authentication({ updateChatLog }) {
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
   const emailInputRef = useRef();
@@ -10,11 +10,37 @@ function Authentication() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [usernameError, setUsernameError] = useState("");
+  const [userName, setUserName] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const validateEmail = (email) => {
     // Regular expression for validating an email address
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
+  };
+
+  const getUserName = async () => {
+    fetch("/api/user")
+      .then((response) => {
+        if (!response.ok) {
+          console.error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((username) => {
+        if(username.username === undefined){
+          console.log("User not logged in");
+          setIsLoggedIn(false);
+          return;
+        }; 
+        console.log("Success username:", username.username);
+        setUserName(username.username);
+        setIsLoggedIn(true);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setIsLoggedIn(false);
+      });
   };
 
   const handleLogin = () => {
@@ -45,6 +71,8 @@ function Authentication() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        setIsLoggedIn(true);
+        getUserName();
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -53,6 +81,23 @@ function Authentication() {
     setPasswordError("");
     setOpenLoginModal(false);
   };
+  
+  useEffect(() => {
+    getUserName();
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn && userName !== "" && userName !== undefined) {
+      console.log("Logged in:", isLoggedIn);
+      console.log("Username:", userName);
+      updateChatLog([
+        {
+          type: "ai",
+          message: `Hello ${userName}! I'm InnoAssist, your AI assistant. How can I help you today?`,
+        },
+      ]);
+    }
+  }, [isLoggedIn, userName]);
 
   const handleRegister = () => {
     const email = emailInputRef.current.value;
@@ -95,27 +140,58 @@ function Authentication() {
     setOpenRegisterModal(false);
     setOpenLoginModal(true);
   };
+  const handleLogout = () => {
+    fetch("/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        action: "logout",
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        updateChatLog([{ type: "ai", message: "Please log in to access InnoAssist's features. If you don't have an account, feel free to register!"}]);
+        setIsLoggedIn(false);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   return (
     <>
-      <Button
-        className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
-        onClick={() => {
-          setOpenLoginModal(true);
-          setOpenRegisterModal(false);
-        }}
-      >
-        Sign in
-      </Button>
-      <Button
-        className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
-        onClick={() => {
-          setOpenRegisterModal(true);
-          setOpenLoginModal(false);
-        }}
-      >
-        Create account
-      </Button>
+      {!isLoggedIn ? (
+        <>
+          <Button
+            className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
+            onClick={() => {
+              setOpenLoginModal(true);
+              setOpenRegisterModal(false);
+            }}
+          >
+            Sign in
+          </Button>
+          <Button
+            className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
+            onClick={() => {
+              setOpenRegisterModal(true);
+              setOpenLoginModal(false);
+            }}
+          >
+            Create account
+          </Button>
+        </>
+      ) : (
+        <Button
+          className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
+      )}
 
       <Modal
         show={openLoginModal}
@@ -152,7 +228,7 @@ function Authentication() {
                 id="password"
                 type="password"
                 ref={passwordInputRef}
-                placeholder="123"
+                placeholder="•••••"
                 required
                 className="text-text-800"
               />
@@ -166,7 +242,7 @@ function Authentication() {
                 Log in to your account
               </Button>
               <Button
-                className="text-primary-200 hover:text-primary-100"
+                className="text-primary-200 hover:text-primary-50 bg-background-700 hover:bg-primary-400 mt-2"
                 onClick={() => {
                   setOpenLoginModal(false);
                 }}
@@ -224,7 +300,7 @@ function Authentication() {
                 id="password"
                 type="password"
                 ref={passwordInputRef}
-                placeholder="123"
+                placeholder="•••••"
                 required
                 className="text-text-800"
               />
@@ -251,7 +327,7 @@ function Authentication() {
                 Create account
               </Button>
               <Button
-                className="text-primary-200 hover:text-primary-100"
+                className="text-primary-200 hover:text-primary-50 bg-background-700 hover:bg-primary-400 mt-2"
                 onClick={() => {
                   setOpenRegisterModal(false);
                 }}

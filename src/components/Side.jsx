@@ -19,7 +19,7 @@ function Side({ chatLog, updateChatLog }) {
         return response.json();
       })
       .then((userName) => {
-        console.log("Success:", userName);
+        console.log("Success:", userName.username);
         setIsLoggedIn(true);
       })
       .catch((error) => {
@@ -111,7 +111,7 @@ function Side({ chatLog, updateChatLog }) {
         Toggle Sidebar
       </Button>
       {open && (
-        <Sidebar className="h-auto bg-background-800 text-background-100 mt-14 fixed">
+        <Sidebar className="h-auto bg-background-800 text-background-100 rounded-lg px-2 mt-14 fixed">
           <div className="my-3 space-y-2">
             <button
               className="bg-background-600 rounded-md w-full hover:bg-primary-400"
