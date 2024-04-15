@@ -14,7 +14,7 @@ function Imprint() {
       </Button>
       <Modal
         show={openImprintModal}
-        className="flex w-1/2 h-fit justify-center bg-background-600 border-primary-500 mx-auto mt-28"
+        className="flex w-3/4 h-fit justify-center bg-background-600 border-primary-500 mx-auto mt-28"
         popup
         onClose={() => setOpenImprintModal(false)}
       >
@@ -26,16 +26,11 @@ function Imprint() {
               This website is operated by Uiyoung Kim.
             </p>
             <p>
-              Contact:
+              Email: Uiyoungkim2002@gmail.com
             </p>
-            <ul>
-              <li>Email: Uiyoungkim2002@gmail.com</li>
-            </ul>
+  
             <p>
-              Address:
-            </p>
-            <p>
-              Hardwaldring 31, 68723 Oftersheim
+              Address: Hardwaldring 31, 68723 Oftersheim
             </p>
             <p>
               Developers:

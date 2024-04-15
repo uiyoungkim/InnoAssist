@@ -74,7 +74,7 @@ function Contact() {
       </Button>
       <Modal
         show={openContactModal}
-        className="flex w-1/4 h-fit justify-center bg-background-600 border-primary-500 mx-auto mt-28"
+        className="flex w-1/2 h-fit justify-center bg-background-600 border-primary-500 mx-auto mt-28"
         popup
         onClose={() => setOpenContactModal(false)}
         initialFocus={emailInputRef}
