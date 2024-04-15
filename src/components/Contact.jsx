@@ -81,7 +81,7 @@ function Contact() {
       >
         <Modal.Header />
         <Modal.Body className="text-text-50">
-          <div className="space-y-6">
+          <div>
             <h2>
               Use this Form if you want to unlock your Account for usage of
               InnoAssist
@@ -146,19 +146,19 @@ function Contact() {
             </div>
             <div className="w-full">
               <Button
-                className="bg-primary-200 hover:bg-primary-400"
+                className="bg-primary-200 hover:bg-primary-400 my-2"
                 onClick={handleContact}
               >
                 Send message
               </Button>
               <Button
-                className="text-primary-200 hover:text-primary-50 bg-background-700 hover:bg-primary-400 mt-2"
+                className="text-primary-200 hover:text-primary-50 bg-background-700 hover:bg-primary-400"
                 onClick={() => {
                   setOpenContactModal(false);
                   setEmailError(false);
-                    setUsernameError(false);
-                    setSubjectError(false);
-                    setMessageError(false);
+                  setUsernameError(false);
+                  setSubjectError(false);
+                  setMessageError(false);
                 }}
               >
                 Close
