@@ -111,7 +111,7 @@ function Side({ chatLog, updateChatLog }) {
         Toggle Sidebar
       </Button>
       {open && (
-        <Sidebar className="h-full bg-background-800 text-background-300 mt-14">
+        <Sidebar className="h-auto bg-background-800 text-background-300 mt-14 fixed">
           <div className="my-3 space-y-2">
             <button
               className="bg-background-600 rounded-md w-full hover:bg-primary-400"
