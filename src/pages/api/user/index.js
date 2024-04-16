@@ -3,7 +3,7 @@ import knexConfig from "../../../../knexfile";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
-import { extractUserId } from "@/helper/auth"; // Stelle sicher, dass der Pfad korrekt ist
+import { extractUserId } from "@/helper/auth";
 
 const db = knex(knexConfig.development);
 

@@ -1,4 +1,4 @@
-import handler from "@/pages/api/user"; // Adjust the path according to your project structure
+import handler from "@/pages/api/user";
 import { createMocks } from "node-mocks-http";
 
 describe("Authentication API Handler Tests", () => {
