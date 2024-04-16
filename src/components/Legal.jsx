@@ -8,7 +8,7 @@ function Legal() {
     <>
       <Button
         className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
-        onClick={() => setOpenLegalModal(true)}
+        onClick={() => setOpenLegalModal(!openLegalModal)}
       >
         Legal
       </Button>

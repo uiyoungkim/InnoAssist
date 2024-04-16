@@ -68,7 +68,7 @@ function Contact() {
     <>
       <Button
         className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
-        onClick={() => setOpenContactModal(true)}
+        onClick={() => setOpenContactModal(!openContactModal)}
       >
         Contact us
       </Button>

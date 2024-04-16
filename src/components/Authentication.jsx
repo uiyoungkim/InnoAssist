@@ -168,7 +168,7 @@ function Authentication({ updateChatLog }) {
           <Button
             className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
             onClick={() => {
-              setOpenLoginModal(true);
+              setOpenLoginModal(!openLoginModal);
               setOpenRegisterModal(false);
             }}
           >
@@ -177,7 +177,7 @@ function Authentication({ updateChatLog }) {
           <Button
             className="text-text-300 hover:bg-secondary-600 hover:text-text-100"
             onClick={() => {
-              setOpenRegisterModal(true);
+              setOpenRegisterModal(!openRegisterModal);
               setOpenLoginModal(false);
             }}
           >
