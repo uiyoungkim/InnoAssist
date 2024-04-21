@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 
+//receive updateChatLog Prop from index.jsx through the navbar
 function Authentication({ updateChatLog }) {
+  //Using the Modal Component from Flowbite twice to switch between Register and Login
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
   const emailInputRef = useRef();
@@ -19,6 +21,7 @@ function Authentication({ updateChatLog }) {
     return re.test(String(email).toLowerCase());
   };
 
+  //Check if User is Logged in, if he is, get the Username
   const getUserName = async () => {
     fetch("/api/user")
       .then((response) => {
@@ -28,12 +31,10 @@ function Authentication({ updateChatLog }) {
         return response.json();
       })
       .then((username) => {
-        if(username.username === undefined){
-          console.log("User not logged in");
+        if (username.username === undefined) {
           setIsLoggedIn(false);
           return;
-        }; 
-        console.log("Success username:", username.username);
+        }
         setUserName(username.username);
         setIsLoggedIn(true);
       })
@@ -43,21 +44,26 @@ function Authentication({ updateChatLog }) {
       });
   };
 
+  //Login Function
   const handleLogin = () => {
+    //get the values from the input fields
     const email = emailInputRef.current.value;
     const password = passwordInputRef.current.value;
 
+    //check if the fields are empty
     if (!email || !password) {
       setEmailError(!email ? "Email field cannot be empty." : "");
       setPasswordError(!password ? "Password field cannot be empty." : "");
       return;
     }
 
+    //check if the email is valid
     if (!validateEmail(email)) {
       setEmailError("Please enter a valid email address.");
       return;
     }
 
+    //login
     fetch("/api/user", {
       method: "POST",
       headers: {
@@ -69,27 +75,28 @@ function Authentication({ updateChatLog }) {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
+      .then(() => {
         setIsLoggedIn(true);
         getUserName();
       })
       .catch((error) => {
         console.error("Error:", error);
       });
+
+    //reset the form
     setEmailError("");
     setPasswordError("");
     setOpenLoginModal(false);
   };
-  
+
+  //Check if User is Logged in when page loads
   useEffect(() => {
     getUserName();
   }, []);
 
+  //If User is Logged in, greet him
   useEffect(() => {
     if (isLoggedIn && userName !== "" && userName !== undefined) {
-      console.log("Logged in:", isLoggedIn);
-      console.log("Username:", userName);
       updateChatLog([
         {
           type: "ai",
@@ -99,11 +106,14 @@ function Authentication({ updateChatLog }) {
     }
   }, [isLoggedIn, userName]);
 
+  //Register Function
   const handleRegister = () => {
+    //get the values from the input fields
     const email = emailInputRef.current.value;
     const password = passwordInputRef.current.value;
     const username = usernameInputRef.current.value;
 
+    //check if the fields are empty
     if (!email || !password || !username) {
       setEmailError(!email ? "Email field cannot be empty." : "");
       setPasswordError(!password ? "Password field cannot be empty." : "");
@@ -111,11 +121,13 @@ function Authentication({ updateChatLog }) {
       return;
     }
 
+    //check if the email is valid
     if (!validateEmail(email)) {
       setEmailError("Please enter a valid email address.");
       return;
     }
 
+    //create the User
     fetch("/api/user", {
       method: "POST",
       headers: {
@@ -128,18 +140,19 @@ function Authentication({ updateChatLog }) {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-      })
       .catch((error) => {
         console.error("Error:", error);
       });
+
+    //reset the form
     setEmailError("");
     setPasswordError("");
     setUsernameError("");
     setOpenRegisterModal(false);
     setOpenLoginModal(true);
   };
+
+  //Logout Function
   const handleLogout = () => {
     fetch("/api/user", {
       method: "POST",
@@ -151,9 +164,15 @@ function Authentication({ updateChatLog }) {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-        updateChatLog([{ type: "ai", message: "Please log in to access InnoAssist's features. If you don't have an account, feel free to register!"}]);
+      .then(() => {
+        //Reset Chat
+        updateChatLog([
+          {
+            type: "ai",
+            message:
+              "Please log in to access InnoAssist's features. If you don't have an account, feel free to register!",
+          },
+        ]);
         setIsLoggedIn(false);
       })
       .catch((error) => {

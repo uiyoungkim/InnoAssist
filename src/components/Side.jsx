@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Button, Modal, TextInput, Sidebar, Label } from "flowbite-react";
 
+//receive chatLog and updateChatLog from index.jsx
 function Side({ chatLog, updateChatLog }) {
+  //Using the Modal Component from Flowbite
   const [open, setOpen] = useState(false);
   const [openChatNameModal, setOpenChatNameModal] = useState(false);
   const chatNameInputRef = useRef();
@@ -10,6 +12,7 @@ function Side({ chatLog, updateChatLog }) {
   const [previousChats, setPreviousChats] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  //check if User is logged in
   const getUserName = async () => {
     fetch("/api/user")
       .then((response) => {
@@ -18,8 +21,7 @@ function Side({ chatLog, updateChatLog }) {
         }
         return response.json();
       })
-      .then((userName) => {
-        console.log("Success:", userName.username);
+      .then(() => {
         setIsLoggedIn(true);
       })
       .catch((error) => {
@@ -27,7 +29,9 @@ function Side({ chatLog, updateChatLog }) {
       });
   };
 
+  //fetch Chats from the database
   const loadChats = async () => {
+    //stop user if they aren't logged in
     if (!isLoggedIn) {
       alert("Please log in before trying to load chats.");
       return;
@@ -36,41 +40,49 @@ function Side({ chatLog, updateChatLog }) {
       const response = await fetch("/api/chat/getChat");
       const data = await response.json();
       setPreviousChats(data);
-      console.log(JSON.stringify(data));
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
+  //check if User is logged in
   useEffect(() => {
     getUserName();
   }, []);
 
+  //load chats when user is logged in
   useEffect(() => {
     if (isLoggedIn) {
       loadChats();
     }
   }, [isLoggedIn]);
 
+  //save chat to the database
   const saveChat = () => {
+    //stop user if they aren't logged in
     if (!isLoggedIn) {
       alert("Please log in before trying to save chat.");
       return;
     }
+    //check if chatLog is empty
     if (!chatLog || Object.keys(chatLog).length === 0) {
       setChatLogError("Chat log cannot be empty.");
       return;
     }
+    //check if chatName is empty
     if (
       chatNameInputRef.current == null ||
       chatNameInputRef.current.value === "" ||
       !chatNameInputRef.current.value
     ) {
+      //open modal if chatName is empty
       setOpenChatNameModal(true);
       setChatNameError("Chat name cannot be empty.");
       return;
     }
     setOpenChatNameModal(false);
+    setChatNameError("");
+
     fetch("/api/chat/saveChat", {
       method: "POST",
       headers: {
@@ -87,14 +99,12 @@ function Side({ chatLog, updateChatLog }) {
         }
         return response.json();
       })
-      .then((data) => {
-        console.log("Success:", data);
-      })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
 
+  //set Chatlog to selected Chat
   const handleChatItemClick = (chatName) => {
     const selectedChat = previousChats.find(
       (chat) => chat.chatName === chatName
@@ -115,13 +125,15 @@ function Side({ chatLog, updateChatLog }) {
           <div className="my-3 space-y-2">
             <button
               className="bg-background-600 rounded-md w-full hover:bg-primary-400"
-              onClick={() => updateChatLog([
-                {
-                  type: "ai",
-                  message:
-                    "Hello! I'm InnoAssist, your AI assistant. How can I help you today?",
-                },
-              ])}
+              onClick={() =>
+                updateChatLog([
+                  {
+                    type: "ai",
+                    message:
+                      "Hello! I'm InnoAssist, your AI assistant. How can I help you today?",
+                  },
+                ])
+              }
             >
               Clear Chat
             </button>

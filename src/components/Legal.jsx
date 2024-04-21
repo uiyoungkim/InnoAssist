@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal } from "flowbite-react";
 
 function Legal() {
+  //Using the Modal Component from Flowbite
   const [openLegalModal, setOpenLegalModal] = useState(false);
 
   return (
@@ -23,22 +24,42 @@ function Legal() {
           <div className="space-y-6">
             <h2>Legal Information</h2>
             <p>
-              This website is provided for informational and educational purposes only. Its content is not intended to constitute legal, financial, or professional advice.
+              This website is provided for informational and educational
+              purposes only. Its content is not intended to constitute legal,
+              financial, or professional advice.
             </p>
             <p>
-              By accessing or using this website, you acknowledge and agree that:
+              By accessing or using this website, you acknowledge and agree
+              that:
             </p>
             <ul>
-              <li>The information on this website is provided "as is" and without warranties of any kind.</li>
-              <li>Your use of this website is at your own risk, and you assume full responsibility for any consequences arising from such use.</li>
-              <li>We do not guarantee the accuracy, completeness, or reliability of any information provided on this website.</li>
-              <li>We are not liable for any damages or losses resulting from your use of, or reliance on, the information contained on this website.</li>
+              <li>
+                The information on this website is provided "as is" and without
+                warranties of any kind.
+              </li>
+              <li>
+                Your use of this website is at your own risk, and you assume
+                full responsibility for any consequences arising from such use.
+              </li>
+              <li>
+                We do not guarantee the accuracy, completeness, or reliability
+                of any information provided on this website.
+              </li>
+              <li>
+                We are not liable for any damages or losses resulting from your
+                use of, or reliance on, the information contained on this
+                website.
+              </li>
             </ul>
             <p>
-              Furthermore, we take data security seriously and implement reasonable measures to protect your personal information. However, we cannot guarantee the security of any information transmitted over the internet.
+              Furthermore, we take data security seriously and implement
+              reasonable measures to protect your personal information. However,
+              we cannot guarantee the security of any information transmitted
+              over the internet.
             </p>
             <p>
-              By continuing to use this website, you agree to abide by all applicable laws and regulations.
+              By continuing to use this website, you agree to abide by all
+              applicable laws and regulations.
             </p>
             <div className="w-full">
               <Button
