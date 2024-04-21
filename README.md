@@ -16,14 +16,12 @@ To begin using innoAssist, please follow these steps:
 - **User-Friendly Interface:** With an intuitive design implemented using Next.js and styled with Tailwind CSS, our chatbot provides a seamless user experience.
 - **Flexible Adjustments:** Users can discuss and tailor their chatbot's features, performance, and budget through a direct consultation after registration.
 
-
-## How to Use
-
-After registration and consultation, you will receive a tailored version of innoAssist that can be integrated into your systems and workflows.
-
 ## Contact Us
 
 If you have any questions or need further assistance, please reach out to us through the contact form available on our platform.
+
+
+
 
 
 
