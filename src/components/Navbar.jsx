@@ -3,8 +3,9 @@ import Contact from "./Contact";
 import Imprint from "./Imprint";
 import Legal from "./Legal";
 
-function Navbar( {updateChatLog} ) {
-
+//Passing updateChatLog through to the Authentication Component
+function Navbar({ updateChatLog }) {
+  //Combine Components into the Navbar
   return (
     <nav className="bg-gray-800 shadow-lg w-full fixed top-0 z-50">
       <div className="w-full px-2 h-16 flex">
@@ -14,10 +15,10 @@ function Navbar( {updateChatLog} ) {
             src="/innoassist_logo_transparent.png"
             alt="Logo"
           />
-          <Legal/>
+          <Legal />
           <Imprint />
           <Contact />
-          <Authentication updateChatLog={updateChatLog}/>
+          <Authentication updateChatLog={updateChatLog} />
         </div>
       </div>
     </nav>

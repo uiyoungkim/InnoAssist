@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
-import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Label, Modal, TextInput } from "flowbite-react";
 
 function Contact() {
+  //Using the Modal Component from Flowbite
   const [openContactModal, setOpenContactModal] = useState(false);
   const emailInputRef = useRef();
   const usernameInputRef = useRef();
@@ -19,13 +20,13 @@ function Contact() {
   };
 
   const handleContact = () => {
+    //get the values from the input fields
     const email = emailInputRef.current.value;
     const message = messageInputRef.current.value;
     const username = usernameInputRef.current.value;
     const subject = subjectInputRef.current.value;
 
-    console.log(email, message, username, subject);
-
+    //check if the fields are empty
     if (!email || !message || !username || subject === "") {
       setEmailError(!email ? "Email field cannot be empty." : "");
       setMessageError(!message ? "Please enter a message." : "");
@@ -34,11 +35,13 @@ function Contact() {
       return;
     }
 
+    //check if the email is valid
     if (!validateEmail(email)) {
       setEmailError("Please enter a valid email address.");
       return;
     }
 
+    //send the email to the server
     fetch("/api/email/contact", {
       method: "POST",
       headers: {
@@ -57,6 +60,7 @@ function Contact() {
         console.error("Error:", error);
       });
 
+    //reset the form
     setEmailError("");
     setMessageError("");
     setUsernameError("");

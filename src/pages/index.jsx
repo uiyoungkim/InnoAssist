@@ -7,7 +7,9 @@ import Side from "@/components/Side";
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [userName, setUserName] = useState("");
+  let newChatLog = [];
 
+  //get username from the server
   const getUserName = async () => {
     fetch("/api/user")
       .then((response) => {
@@ -17,7 +19,6 @@ export default function Home() {
         return response.json();
       })
       .then((username) => {
-        console.log("Success username:", username.username);
         setUserName(username.username);
       })
       .catch((error) => {
@@ -25,16 +26,20 @@ export default function Home() {
       });
   };
 
+  //try to get Username when page loads
   useEffect(() => {
     getUserName();
   }, []);
 
+  //set Chatlog to signed out greetings
   const [chatLog, setChatLog] = useState([
     {
       type: "ai",
-      message: `Please log in to access InnoAssist's features. If you don't have an account, feel free to register!`,
+      message: `Please sign in to access InnoAssist's features. If you don't have an account, feel free to register!`,
     },
   ]);
+
+  //set Chatlog to signed in greetings
   useEffect(() => {
     if (userName !== "" && userName !== undefined) {
       setChatLog([
@@ -47,14 +52,15 @@ export default function Home() {
   }, [userName]);
   const [isLoading, setIsLoading] = useState(false);
 
-  let newChatLog = [];
-
+  //function to change Chat log passed down to Components
   const updateChatLog = (chatData) => {
     setChatLog(chatData);
   };
 
+  //function to handle a sent message
   const handleSubmit = (event) => {
     event.preventDefault();
+    //check if message is empty
     if (!inputValue || inputValue.length === 0) {
       return;
     }
@@ -73,17 +79,8 @@ export default function Home() {
       setInputValue(""); // Clear input field
     }
 
-    // test case without sending an API request
-    else if (inputValue.toLowerCase() === "test") {
-      newChatLog = [
-        // Add user message and test response to chat log
-        ...chatLog,
-        { type: "user", message: inputValue },
-        { type: "ai", message: "Test response" },
-      ];
-      setChatLog(newChatLog); // Update chat log
-      setInputValue(""); // Clear input field
-    } else if (inputValue.toLowerCase() === "omae wa mou shindeiru") {
+    // ¿nani?
+     else if (inputValue.toLowerCase() === "omae wa mou shindeiru") {
       newChatLog = [
         ...chatLog,
         { type: "user", message: "お前はもう死んでいる" },
@@ -133,14 +130,26 @@ export default function Home() {
         if (error.response) {
           const statusCode = error.response.status;
           if (statusCode === 500) {
-            alert("Please log in before trying to chat with InnoAssist.");
-            updateChatLog([{ type: "ai", message: "Please log in to access InnoAssist's features. If you don't have an account, feel free to register!"}]);
+            alert("Please sign in before trying to chat with InnoAssist.");
+            updateChatLog([
+              {
+                type: "ai",
+                message:
+                  "Please sign in to access InnoAssist's features. If you don't have an account, feel free to register!",
+              },
+            ]);
           } else if (statusCode === 403) {
             // Handle 403 Forbidden Error
             alert(
               "It seems you havent unlocked your account yet. Please contact us using our Contact Form."
             );
-            updateChatLog([{ type: "ai", message: "Please log in to access InnoAssist's features. If you don't have an account, feel free to register!"}]);
+            updateChatLog([
+              {
+                type: "ai",
+                message:
+                  "Please sign in to access InnoAssist's features. If you don't have an account, feel free to register!",
+              },
+            ]);
           }
         } else if (error.request) {
           console.error("No response received:", error.request);
@@ -173,7 +182,7 @@ export default function Home() {
         if (error.response) {
           const statusCode = error.response.status;
           if (statusCode === 500) {
-            alert("Please log in before trying to chat with InnoAssist.");
+            alert("Please sign in before trying to chat with InnoAssist.");
           } else if (statusCode === 403) {
             // Handle 403 Forbidden Error
             alert(
